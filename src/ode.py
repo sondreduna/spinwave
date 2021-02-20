@@ -24,7 +24,7 @@ class HeunStep(ODEStep):
         y_  = y + h/2 * (self.f(t,y) + self.f(t + h, y_p))
 
         self.y = y_
-        self.t = t + h
+        self.t += h
         return self.y
 
 class RK4Step(ODEStep):
@@ -32,10 +32,10 @@ class RK4Step(ODEStep):
     def __call__(self):
         t,y,h = self.t, self.y, self.h
 
-        k1  = self.f( t      , y)
+        k1  = self.f( t      , y           )
         k2  = self.f( t + h/2, y + k1 * h/2)
         k3  = self.f( t + h/2, y + k2 * h/2)
-        k4  = self.f( t + h  , y + k3 * h)
+        k4  = self.f( t + h  , y + k3 * h  )
     
         self.y =  y + h * (k1 + 2*k2 + 2*k3 + k4)/6
         self.t += h
@@ -49,14 +49,13 @@ class ODESolver:
             self.step = HeunStep(f,h,y0,t0)
         elif method == "RK4":
             self.step = RK4Step(f,h,y0,t0)
-        else:
             raise NotImplementedError
 
         self.tN = tN 
         self.N  = int((tN - t0)/h)
 
-        self.dim = np.size(y0)
-        self.Y = np.zeros((self.N + 1, self.dim))
+        self.shape = np.shape(y0)
+        self.Y = np.zeros((self.N + 1, self.shape[0], self.shape[1]))
         self.T = np.arange(t0, t0 + (self.N + 1) * h, h)
 
     def __call__(self):

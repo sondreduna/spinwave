@@ -24,6 +24,7 @@ newparams = {'axes.titlesize': fontsize,
 plt.rcParams.update(newparams)
 
 from ode import *
+from magnon import *
 
 def fa(t, X):
     # Example taken from beginning of Chapter II in
@@ -76,4 +77,22 @@ def ode_solver_test():
     plt.plot(Xs[:,0], Xs[:,2])
     plt.tight_layout()
     fig.savefig("../fig/odetest.pdf")
+    
+
+
+def llg_test():
+    
+    B = np.array([0,0,1])
+    h = 0.01
+
+    S_0 = np.array([[0,np.cos(np.pi/2 - 0.01),np.sin(np.pi/2 - 0.01)]])
+
+    spinsolver = ODESolver(f_llg,0,S_0,3,h,"Heun")
+
+    Ts, Xs = spinsolver()
+    plt.plot(Xs[:,0,1:])
+    plt.tight_layout()
+    plt.savefig("../fig/llgtest.pdf")
+    
+
     
