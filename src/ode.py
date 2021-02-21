@@ -49,6 +49,7 @@ class ODESolver:
             self.step = HeunStep(f,h,y0,t0)
         elif method == "RK4":
             self.step = RK4Step(f,h,y0,t0)
+        else:
             raise NotImplementedError
 
         self.tN = tN 

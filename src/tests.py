@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 from matplotlib import rc
 from time import time
+from mpl_toolkits.mplot3d import Axes3D
 
 rc("text",usetex = True)
 rc("font",family = "sans-serif")
@@ -82,17 +83,24 @@ def ode_solver_test():
 
 def llg_test():
     
-    B = np.array([0,0,1])
     h = 0.01
 
-    S_0 = np.array([[0,np.cos(np.pi/2 - 0.01),np.sin(np.pi/2 - 0.01)]])
+    S_0 = np.array([initial_cond(0.1,0.1)])
 
-    spinsolver = ODESolver(f_llg,0,S_0,3,h,"Heun")
+    params = {'d':0,'J':0,'mu':1,'B':np.array([0,0,1.]),'alpha':0}
+
+    spinsolver = MagnonSolver(0,S_0,10,h,"RK4",**params)
 
     Ts, Xs = spinsolver()
-    plt.plot(Xs[:,0,1:])
+    plt.plot(Xs[:,0,0],Xs[:,0,1])
     plt.tight_layout()
+    plt.axis("square")
     plt.savefig("../fig/llgtest.pdf")
+
+    np.save("../data/T.npy",Ts)
+    np.save("../data/S.npy",Xs)
+    
+
     
 
     
