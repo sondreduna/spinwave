@@ -12,7 +12,7 @@ mu = 1
 B  = np.array([0,0,1])
 alpha = 0
 
-gamma = 2
+gamma = 1
 
 C = -gamma/(mu*(1+alpha**2))
 
@@ -76,5 +76,4 @@ class MagnonSolver(ODESolver):
         mu = kwargs["mu"]
         B = kwargs["B"]
         alpha = kwargs["alpha"]
-
     

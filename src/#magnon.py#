@@ -12,7 +12,7 @@ mu = 1
 B  = np.array([0,0,1])
 alpha = 0
 
-gamma = 2
+gamma = 1
 
 C = -gamma/(mu*(1+alpha**2))
 
@@ -20,11 +20,9 @@ C = -gamma/(mu*(1+alpha**2))
 def H(S):
 
     n = np.shape(S)[0] # number of spins
-    
-    #ss = -1/2 * J * np.einsum('ij,ik->',S,S) # sum over all spins
     ss = - J * np.sum([ S[:,i] @ ( S[:,i-1] + S[:,(i + 1) % n] ) for i in range(n)])
-    s2 = - d * np.sum(S[:,2]*S[:,2])
-    sb = - np.sum([s @ B for s in S])
+    s2 = - d * np.einsum('i,i',S[:,2],S[:,2])
+    sb = - mu* np.einsum('ji,i->',S,B)
     
     return ss + s2 + sb
 
@@ -51,8 +49,6 @@ def gradH(S):
 
 
 def f_llg(t,S,**kwargs):
-
-   
     
     dH = gradH(S)
     return C * ( np.cross(S,dH) + alpha * np.cross(S, np.cross(S, dH) ) )
@@ -76,5 +72,4 @@ class MagnonSolver(ODESolver):
         mu = kwargs["mu"]
         B = kwargs["B"]
         alpha = kwargs["alpha"]
-
     

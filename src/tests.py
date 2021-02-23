@@ -80,18 +80,18 @@ def ode_solver_test():
     fig.savefig("../fig/odetest.pdf")
     
 
-
 def llg_test():
     
     h = 0.01
 
-    S_0 = np.array([initial_cond(0.1,0.1)])
+    S_0 = np.array([initial_cond(0.1,0.5)])
 
     params = {'d':0,'J':0,'mu':1,'B':np.array([0,0,1.]),'alpha':0}
 
-    spinsolver = MagnonSolver(0,S_0,10,h,"RK4",**params)
+    spinsolver = MagnonSolver(0,S_0,2*np.pi,h,"RK4",**params)
 
     Ts, Xs = spinsolver()
+    
     plt.plot(Xs[:,0,0],Xs[:,0,1])
     plt.tight_layout()
     plt.axis("square")

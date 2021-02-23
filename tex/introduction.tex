@@ -1,14 +1,15 @@
-\section{Introduction \& Background}
+\section{Theoretical background}
 
 Hamiltonian 
-
-\begin{equation}
-	H = - \frac{1}{2} \sum_{j,k}^{N} J_{jk} \mathbf{S}_j \cdot \mathbf{S}_k - d_z \sum_{j=1}^{N} (S_{j,z})^2 - \mu \sum_{j=1}^{N} \mathbf{B}_j \cdot \mathbf{S}_j 
+\begin{equation}\label{eq:hamiltionian}
+	H = - \frac{1}{2} \sum_{j,k}^{N} J_{jk} \mathbf{S}_j \cdot \mathbf{S}_k - d_z \sum_{j=1}^{N} (S_{j,z})^2 - \mu \sum_{j=1}^{N} \mathbf{B}_j \cdot \mathbf{S}_j
 \end{equation}
 
 Landau-Lifshitz-Gilbert equation 
-
-\begin{align}
-	\pd{\mathbf{S}_j}{t} &= \frac{-\gamma}{\mu(1 + \alpha^2)} \left[ \mathbf{S}_j \times \mathbf{H}_j + \alpha \mathbf{S}_j \times (\mathbf{S}_j + \mathbf{H}_j) \right] \\
-	\mathbf{H}_j &= -\pd{H}{\mathbf{S}_j} + \boldsymbol{\xi}_j
-\end{align}
+\begin{equation}\label{eq:llg}
+	\partial_t \mathbf{S}_j = \frac{-\gamma}{\mu(1 + \alpha^2)} \left[ \mathbf{S}_j \times \mathbf{H}_j + \alpha \mathbf{S}_j \times (\mathbf{S}_j + \mathbf{H}_j) \right]
+\end{equation}
+where
+\begin{equation}\label{eq:ef_field}
+	\mathbf{H}_j = -\pd{H}{\mathbf{S}_j} + \boldsymbol{\xi}_j
+\end{equation}
