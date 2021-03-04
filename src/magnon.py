@@ -10,6 +10,8 @@ gamma = 1
 
 C = -gamma/(mu*(1+alpha**2))
 
+e_z = np.array([0,0,1])
+
 def H(S):
 
     n = np.shape(S)[0] # number of spins
@@ -17,35 +19,20 @@ def H(S):
     s2 = - d * np.einsum('i,i',S[:,2],S[:,2])
     sb = - mu* np.einsum('ji,i->',S,B)
 
-    #return sb
     return ss + s2 + sb
 
-def djH(S,j):
-
-    delta = 0.0001
+def djH(S,j,n):
+    ss = J * np.sum(S[j-1:(j+1)%n,:], axis = 0)
+    return ss + 2* d*S[j,2] * e_z + mu * B
     
-    dSx   = np.zeros(np.shape(S))
-    dSy   = np.zeros(np.shape(S))
-    dSz   = np.zeros(np.shape(S))
-    
-    dSx[j] = np.array([delta,0,0])
-    dSy[j] = np.array([0,delta,0])
-    dSz[j] = np.array([0,0,delta])
-    
-    dx    = (H(S + dSx) - H(S - dSx))/(2*delta)
-    dy    = (H(S + dSy) - H(S - dSy))/(2*delta)
-    dz    = (H(S + dSz) - H(S - dSz))/(2*delta)
-    
-    return np.array([dx,dy,dz])
-
-def gradH(S):
-    return np.array([-djH(S,j) for j in range(S.shape[0])])
+def gradH(S,n):
+    return np.array([ djH(S,j,n) for j in range(n)])
 
 
 def f_llg(t,S,**kwargs):
-    
-    dH = gradH(S)
-    return C * ( np.cross(S,dH) + alpha * np.cross(S, np.cross(S, dH) ) )
+    n = np.shape(S)[0] # number of spins
+    dH = gradH(S,n)
+    return C * (np.cross(S,dH) + alpha * np.cross(S, np.cross(S, dH) ) )
 
 
 def initial_cond(theta,phi):
@@ -53,6 +40,7 @@ def initial_cond(theta,phi):
     x = np.sin(theta) * np.cos(phi)
     y = np.sin(theta) * np.sin(phi)
     z = np.cos(theta)
+    
     return np.array([x,y,z])
 
 

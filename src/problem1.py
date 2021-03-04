@@ -295,9 +295,9 @@ def plot_damping():
 
 if __name__ == "__main__":
     
-    #compare_analyical()
-    #error_analysis(10)
+    #compare_analytical()
+    error_analysis(10)
     #plot_error()
     #damping()
-    plot_damping()
+    #plot_damping()
     
