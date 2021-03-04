@@ -66,7 +66,7 @@ def ode_solver_test():
     # Try experimenting with the timestep.
     h  = 5e-4
 
-    fasolver = ODESolver(fa,0,X0,2*T,h,"RK4")
+    fasolver = ODESolver(fa,0,X0,2*T,h,"RK4")    
     # Also, measure the time of the calculation
     tic = time()
     Ts, Xs = fasolver()

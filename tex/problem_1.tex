@@ -16,7 +16,7 @@ in the absence of damping and anisotropy.
 
 In this particular case, we can easily find an analytical solution to compare with. The LLG-equation reads
 \[
-	\partial_t \mathbf{S} = -\frac{\gamma}{\mu} \mathbf{S} \times \mathbf{B}.
+	\partial_t \mathbf{S} = -\gamma \mathbf{S} \times \mathbf{B}.
 \]
 As $\mathbf{B} = (0,0,B_0)^T$,
 \[
@@ -50,16 +50,48 @@ with the frequency $\omega = \gamma B_0$. When comparing the exact solution with
 
 \begin{figure}[htb]
 	\centering
-	\includegraphics[width=\columnwidth]{../fig/comparison.pdf}
+	\includegraphics[width=0.8\columnwidth]{../fig/comparison.pdf}
 	\caption{The plot shows the exact solution given in \eqref{eq:exact_1} and \eqref{eq:exact_2} compared with the numerical solution sampled at every tenth step to be able to distinguish the paths.}
 	\label{fig:comp}
 \end{figure} 
 
-It is perhaps more enlightening to consider the pointwise difference of the exact and numerical solution. This is shown in figure \ref{fig:comp_diff}. The figure shows that the deviations locally oscillate, but globally, of course, the absolute deviation increases.
+It is perhaps more enlightening to consider the pointwise difference of the exact and numerical solution. This is shown in figure \ref{fig:comp_diff}. The figure shows that the deviations locally oscillate, and that the absolute global deviations increase with time as we'd expect. Further considerations on the deviations are considered in \ref{sec:error}.
 
 \begin{figure}[htb]
 	\centering
-	\includegraphics[width=\columnwidth]{../fig/comparison_diff.pdf}
+	\includegraphics[width=0.8\columnwidth]{../fig/comparison_diff.pdf}
 	\caption{The plot shows the difference between the exact solutions given in \eqref{eq:exact_1} and \eqref{eq:exact_2}, and the numerical solutions over one period.}
 	\label{fig:comp_diff}
 \end{figure} 
+
+\subsection{Error analysis}\label{sec:error}
+
+For the error analysis, I choose $10$ logarithmically spaced step-lengths from $10^{-5}$ to $10^{-1}$. As a measure of the \textit{global error}, that is the cumulated error over one period. The error as a function of step length is shown in figure \ref{fig:err_heun}.
+
+\begin{figure}[htb]
+	\centering
+	\includegraphics[width = 0.8\columnwidth]{../fig/err_heun.pdf}
+	\caption{Error as a function of step length for Heun's method.}
+	\label{fig:err_heun}
+\end{figure}
+
+Since Heun's method is of second order, we would expect its slope in a log-log plot to be roughly $2$. However, as demonstrated in figure \ref{fig:err_heun}, the slope is slightly less than $2$. This is due to \textcolor{red}{FIND REASON FOR THIS}. In figure \ref{fig:err_euler} we have plotted the errors for Euler's method for the same step lengths. This plot clearly demonstrates the well known fact that Euler's method is of order $1$.
+
+
+\begin{figure}[htb]
+	\centering
+	\includegraphics[width = 0.8\columnwidth]{../fig/err_euler.pdf}
+	\caption{Error as a function of step length for Euler's method.}
+	\label{fig:err_euler}
+\end{figure}
+
+\subsection{Damped precession of spin in magnetic field}
+
+Next, we include damping in the model. This amounts to setting $\alpha \neq 0$. The plots of the trajectories in the $x$ and $y$ direction for three different damped cases is shown in figure \ref{fig:damped}. The damping lifetime $\tau =  \frac{1}{\alpha \omega}$. 
+
+\begin{figure}[htb]
+	\centering
+	\includegraphics[width=\columnwidth]{../fig/damped_precession.pdf}
+	\caption{Three different damped precessions.}
+	\label{fig:damped}
+\end{figure}

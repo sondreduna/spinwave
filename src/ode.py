@@ -20,10 +20,9 @@ class HeunStep(ODEStep):
     def __call__(self):
         t,y,h = self.t, self.y, self.h
         
-        y_p = y + h   * self.f(t, y)
-        y_  = y + h/2 * (self.f(t,y) + self.f(t + h, y_p))
+        y_p = y + h * self.f(t, y)
 
-        self.y = y_
+        self.y = y + h/2 * (self.f(t,y) + self.f(t + h, y_p))
         self.t += h
         return self.y
 
@@ -41,6 +40,15 @@ class RK4Step(ODEStep):
         self.t += h
         return self.y
 
+class EulerStep(ODEStep):
+
+    def __call__(self):
+        t,y,h = self.t, self.y, self.h
+
+        self.y = y + h*self.f(t,y)
+        self.t += h
+        return self.y
+
 class ODESolver:
 
     def __init__(self,f,t0,y0,tN,h,method = "Heun"):
@@ -49,22 +57,26 @@ class ODESolver:
             self.step = HeunStep(f,h,y0,t0)
         elif method == "RK4":
             self.step = RK4Step(f,h,y0,t0)
+        elif method == "Euler":
+            self.step = EulerStep(f,h,y0,t0)
         else:
             raise NotImplementedError
 
-        self.tN = tN 
+        self.tN = tN
         self.N  = int((tN - t0)/h)
-
-        self.shape = np.shape(y0)
-        self.Y = np.zeros((self.N + 1, self.shape[0], self.shape[1]))
-        self.T = np.arange(t0, t0 + (self.N + 1) * h, h)
+        
+        self.shape = np.size(y0) 
+        
+        self.Y = np.zeros((self.N + 2, self.shape))
+        self.T = np.zeros(self.N + 2)
 
     def __call__(self):
         self.Y[0] = self.step.y
 
-        for i in range(1,self.N + 1):
+        for i in range(1,self.N + 2):
             self.step.h = min(self.step.h, self.tN - self.T[i-1])
             self.Y[i] = self.step()
+            self.T[i] = self.T[i-1] + self.step.h 
 
         return self.T, self.Y
         
