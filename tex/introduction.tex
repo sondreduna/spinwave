@@ -1,20 +1,20 @@
 \section{Theoretical background}
 
-Hamiltonian 
+The hamiltonian governing the dynamics of a chain of spins is
 \begin{equation}\label{eq:hamiltionian}
-	H = - \frac{1}{2} \sum_{j,k}^{N} J_{jk} \mathbf{S}_j \cdot \mathbf{S}_k - d_z \sum_{j=1}^{N} (S_{j,z})^2 - \mu \sum_{j=1}^{N} \mathbf{B}_j \cdot \mathbf{S}_j
+	H = - \frac{1}{2} \sum_{j,k}^{N} J_{jk} \mathbf{S}_j \cdot \mathbf{S}_k - d_z \sum_{j=1}^{N} (S_{j,z})^2 - \mu \sum_{j=1}^{N} \mathbf{B}_j \cdot \mathbf{S}_j,
 \end{equation}
 
-Landau-Lifshitz-Gilbert equation 
+And the time-dependence is governed by the Landau-Lifshitz-Gilbert equation (LLG) 
 \begin{equation}\label{eq:llg}
-	\partial_t \mathbf{S}_j = \frac{-\gamma}{\mu(1 + \alpha^2)} \left[ \mathbf{S}_j \times \mathbf{H}_j + \alpha \mathbf{S}_j \times (\mathbf{S}_j \times \mathbf{H}_j) \right]
+	\der{\mathbf{S}_j}{t} = \frac{-\gamma}{\mu(1 + \alpha^2)} \left[ \mathbf{S}_j \times \mathbf{H}_j + \alpha \mathbf{S}_j \times (\mathbf{S}_j \times \mathbf{H}_j) \right]
 \end{equation}
 where
 \begin{equation}\label{eq:ef_field}
 	\mathbf{H}_j = -\pd{H}{\mathbf{S}_j} + \boldsymbol{\xi}_j.
 \end{equation}
 
-In the absence of noise we can find an explicit relation for the effective field $\mathbf{H}_j$ in \eqref{eq:ef_field}. This can be done by noting that 
+In the absence of noise, $\boldsymbol{\xi}_j \equiv 0$, we can find an explicit relation for the effective field $\mathbf{H}_j$ in \eqref{eq:ef_field}. This can be done by noting that 
 \begin{align*}
 	-\pd{H}{\mathbf{S}_j} &= \frac{1}{2}\sum_{i,k}^{N} J_{ik} \frac{\partial}{\partial \mathbf{S}_j} \left( \mathbf{S}_i \cdot \mathbf{S}_k \right) + d_z \sum_{i=1}^{N} \frac{\partial }{\partial \mathbf{S}_j}(\mathbf{S}_i \cdot \mathbf{e}_z)^2 + \mu \sum_{i=1}^{N} \frac{\partial }{\partial \mathbf{S}_j} \mathbf{B}_i \cdot \mathbf{S}_i \\
 	&= \frac{1}{2}\sum_{i,k}^{N} J_{ik} \left( \delta_{ij} \mathbf{S}_k + \delta_{jk} \mathbf{S}_i \right) + d_z \sum_{i=1}^N 2 \delta_{ij} (\mathbf{S}_i \cdot \mathbf{e}_z) \mathbf{e}_z + \mu \sum_{i=1}^N \mathbf{B}_i \delta_{ij} \\
@@ -24,6 +24,6 @@ In the absence of noise we can find an explicit relation for the effective field
 
 where we in the last transition have made further simplifications by only performing the sum over the nearest neighbours $\mathcal{N}_j$ of $j$. Using this expression we might rewrite the LLG in \eqref{eq:llg} as
 \begin{align*}\label{eq:llg_simplified}
-	\partial_t \mathbf{S}_j = \frac{-\gamma}{\mu(1 + \alpha^2)} \Bigg[ \mathbf{S}_j &\times \left( \sum_{i \in \mathcal{N}_j} J_{ij} \mathbf{S}_i + 2d_z S_{j,z} \mathbf{e}_z + \mu \mathbf{B} \right) \\
+	\der{\mathbf{S}_j}{t} = \frac{-\gamma}{\mu(1 + \alpha^2)} \Bigg[ \mathbf{S}_j &\times \left( \sum_{i \in \mathcal{N}_j} J_{ij} \mathbf{S}_i + 2d_z S_{j,z} \mathbf{e}_z + \mu \mathbf{B} \right) \\
 	+ \alpha \mathbf{S}_j \times \Bigg[  \mathbf{S}_j  &\times \left( \sum_{i \in \mathcal{N}_j} J_{ij} \mathbf{S}_i + 2d_z S_{j,z} \mathbf{e}_z + \mu \mathbf{B} \right) \Bigg] \Bigg].
 \end{align*}

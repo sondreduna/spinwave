@@ -4,7 +4,7 @@ J  = 0
 d  = 0
 mu = 1
 B  = np.array([0,0,1])
-alpha = 0
+alpha = 0    
 
 gamma = 1
 
@@ -22,7 +22,7 @@ def H(S):
     return ss + s2 + sb
 
 def djH(S,j,n):
-    ss = J * np.sum(S[j-1:(j+1)%n,:], axis = 0)
+    ss = J * np.sum(S[[j-1,(j+1)%n],:], axis = 0) # sum over nearest neighbours
     return ss + 2* d*S[j,2] * e_z + mu * B
     
 def gradH(S,n):

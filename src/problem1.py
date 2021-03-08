@@ -213,7 +213,7 @@ def damping():
     alphas = np.array([0.1, 0.2, 0.5])
     for a in alphas:
         params = {'d':0,'J':0,'mu':1,'B':np.array([0,0,1.]),'alpha':a}
-        spinsolver = MagnonSolver(0,S_0,10*np.pi,h,"RK4",**params)
+        spinsolver = MagnonSolver(0,S_0,10*np.pi,h,"Heun",**params)
         Ts, Xs = spinsolver()
 
         np.save(f"../data/X_a={a}.npy",Xs)

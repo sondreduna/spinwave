@@ -70,24 +70,32 @@ For the error analysis, I choose $10$ logarithmically spaced step-lengths from $
 
 \begin{figure}[htb]
 	\centering
-	\includegraphics[width = 0.8\columnwidth]{../fig/err_heun.pdf}
-	\caption{Error as a function of step length for Heun's method.}
+	\begin{minipage}{0.49\columnwidth}
+	\centering
+	\includegraphics[width =\columnwidth]{../fig/err_heun.pdf}
+	\captionof{figure}{Error as a function of step length for Heun's method.}
 	\label{fig:err_heun}
+	\end{minipage}
+	\hfill
+	\begin{minipage}{0.49\columnwidth}
+	\centering
+	\includegraphics[width = \columnwidth]{../fig/err_euler.pdf}
+	\captionof{figure}{Error as a function of step length for Euler's method.}
+	\label{fig:err_euler}
+	\end{minipage}
 \end{figure}
-
 Since Heun's method is of second order, we would expect its slope in a log-log plot to be roughly $2$. However, as demonstrated in figure \ref{fig:err_heun}, the slope is slightly less than $2$. This is due to \textcolor{red}{FIND REASON FOR THIS}. In figure \ref{fig:err_euler} we have plotted the errors for Euler's method for the same step lengths. This plot clearly demonstrates the well known fact that Euler's method is of order $1$.
 
 
-\begin{figure}[htb]
-	\centering
-	\includegraphics[width = 0.8\columnwidth]{../fig/err_euler.pdf}
-	\caption{Error as a function of step length for Euler's method.}
-	\label{fig:err_euler}
-\end{figure}
+
 
 \subsection{Damped precession of spin in magnetic field}
 
-Next, we include damping in the model. This amounts to setting $\alpha \neq 0$. The plots of the trajectories in the $x$ and $y$ direction for three different damped cases is shown in figure \ref{fig:damped}. The damping lifetime $\tau =  \frac{1}{\alpha \omega}$. 
+Next, we include damping in the model. This amounts to setting $\alpha \neq 0$. The plots of the trajectories in the $x$ and $y$ direction for three different damped cases is shown in figure \ref{fig:damped}. The damping lifetime $\tau =  \frac{1}{\alpha \omega}$ is fitted to the plots by plotting 
+\[
+	\pm \sqrt{S_x^2 + S_y^2} \exp{\left(-\alpha \omega t\right)},
+\]
+which is approximately the shape of the envelope in the presence of damping.  
 
 \begin{figure}[htb]
 	\centering
