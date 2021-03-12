@@ -1,32 +1,6 @@
 from magnon import *
-
-import matplotlib.pyplot as plt
-from matplotlib import rc
 from time import time
-from mpl_toolkits.mplot3d import Axes3D
 from tqdm import tqdm
-import matplotlib.gridspec as gridspec
-
-rc("text",usetex = True)
-rc("font",family = "sans-serif")
-
-fontsize = 25
-newparams = {'axes.titlesize': fontsize,
-             'axes.labelsize': fontsize,
-             'ytick.labelsize': fontsize,
-             'xtick.labelsize': fontsize, 
-             'legend.fontsize': fontsize,
-             'figure.titlesize': fontsize,
-             'legend.handlelength': 1.5, 
-             'lines.linewidth': 2,
-             'lines.markersize': 7,
-             'figure.figsize': (11, 7), 
-             'figure.dpi':200,
-             'text.usetex' : True,
-             'font.family' : "sans-serif"
-            }
-
-plt.rcParams.update(newparams)
 
 def S_xy(wt,a,b):
     x = a*np.cos(wt) - b*np.sin(wt)
@@ -95,6 +69,6 @@ def damping():
 
 if __name__ == "__main__":
     
-    #error_analysis(10)
+    error_analysis(10)
     #damping()
     

@@ -5,11 +5,12 @@ from mpl_toolkits.mplot3d import Axes3D
 from tqdm import tqdm
 import matplotlib.gridspec as gridspec
 import matplotlib as mpl
+import numpy as np
 
 rc("text",usetex = True)
 rc("font",family = "sans-serif")
 
-fontsize = 25
+fontsize = 24
 newparams = {'axes.titlesize': fontsize,
              'axes.labelsize': fontsize,
              'ytick.labelsize': fontsize,
@@ -245,33 +246,22 @@ def plot_ground_state():
     Ts      = np.load("../data/T_gs.npy")
 
     # plotting for J > 0 
-    fig = plt.figure()
+    fig, ax = plt.subplots(ncols = 2, figsize = (20,8),sharey=True)
 
-    plt.title("$J > 0$")
+    ax[0].set_title("$J > 0$")
 
-    plt.plot(Ts, S_ferro[:,:,2])
-    plt.xlabel("$t$")
+    ax[0].plot(Ts, S_ferro[:,:,2])
+    ax[0].set_xlabel("$t$")
+    ax[0].set_ylabel("$S_z(t)$")
+    ax[0].grid(ls = "--")
 
-    plt.ylabel("$S_z(t)$")
-    plt.grid(ls = "--")
-
-    plt.tight_layout()
-
-    fig.savefig("../fig/gs_ferro.pdf")
-
-    fig = plt.figure()
-
-    plt.title("$J < 0$")
-
-    plt.plot(Ts, S_anti[:,:,2])
-    plt.xlabel("$t$")
-
-    plt.ylabel("$S_z(t)$")
-    plt.grid(ls = "--")
+    ax[1].set_title("$J < 0$")
+    ax[1].plot(Ts, S_anti[:,:,2])
+    ax[1].set_xlabel("$t$")
+    ax[1].grid(ls = "--")
 
     plt.tight_layout()
-
-    fig.savefig("../fig/gs_antiferro.pdf")
+    fig.savefig("../fig/gs.pdf")
 
 
 def plot_precessions():
@@ -392,3 +382,46 @@ def plot_coupled():
     plt.tight_layout()
 
     fig.savefig("../fig/10_precessions_coupled.pdf")    
+
+
+def plot_heat_timeevo():
+
+    S1 =  np.load("../data/X_coupled.npy")
+    S2 =  np.load("../data/X_coupled_alpha=0.1.npy")
+
+    x1 = S1[0:4000:,:,0]
+    x2 = S2[0:4000:,:,0]
+    
+    fig = plt.figure(figsize = (20,12))
+
+    gs = gridspec.GridSpec(8, 2)
+
+    ax = plt.subplot(gs[:7, 0])
+
+    ax.set_title(r"$\alpha = 0$")
+    ax.imshow(x1)
+    ax.set_xlabel(r"Particle index")
+    ax.set_ylabel(r"Timestep")
+
+    ax.set_aspect(0.003)
+
+    ax = plt.subplot(gs[:7, 1])
+
+    ax.set_title(r"$\alpha = 0.1$")
+    im = ax.imshow(x2)
+    ax.set_xlabel(r"Particle index")
+    ax.set_ylabel(r"Timestep")
+
+    ax.set_aspect(0.003)
+    
+    cm = mpl.cm.get_cmap('viridis')
+    
+    cb_ax = plt.subplot(gs[7,:])    
+    norm= mpl.colors.Normalize(vmin=min(x1[:,0]),vmax= max(x1[:,0]))
+    cb1 = mpl.colorbar.ColorbarBase(cb_ax, cmap=cm,norm = norm,
+                                orientation='horizontal')
+    cb1.set_label(r'$S_x$')
+
+    plt.tight_layout()
+
+    fig.savefig("../fig/damped_vs_undamped.pdf")

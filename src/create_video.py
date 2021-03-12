@@ -36,7 +36,7 @@ def spin_snapshot(S):
 
     fig, ax = plt.subplots(figsize = (13,8))
     
-    x = np.linspace(0,2,10)
+    x = np.linspace(0,2,S[:,0].size) # stack all spins inside (0, 2)
     
     u = S[:,0]
     v = S[:,1]
@@ -64,16 +64,15 @@ def spin_snapshot(S):
 
 def spin_video(S,title,savepath):
 
-    n = 30 # use every 30th snapshot
-
-    N = S[::n,0,0].size
+    N = 400        # use 400 images per video
+    S = S[::2,:,:] # use only every second image
     
     for i in range(N):
         fig = spin_snapshot(S[i,:,:])
         fig.savefig(savepath+"img{0:0=3d}.png".format(i))
 
     img_name = savepath + "img%03d.png"
-    os.system(f"ffmpeg -framerate 20 -i {img_name} {title}.mp4")
+    os.system(f"ffmpeg -framerate 60 -i {img_name} {title}.mp4")
 
     # remove all the pictures !
 
@@ -84,3 +83,9 @@ if __name__ == "__main__":
 
     S = np.load("../data/X_coupled.npy")
     spin_video(S,"../fig/coupled_spins","/home/sondre/Pictures/figs_simulation/")
+
+    S = np.load("../data/X_coupled_alpha=0.1.npy")
+    spin_video(S,"../fig/coupled_spins_damped","/home/sondre/Pictures/figs_simulation/")
+
+    S = np.load("../data/X_coupled_anti.npy")
+    spin_video(S,"../fig/coupled_spins_anti","/home/sondre/Pictures/figs_simulation/")

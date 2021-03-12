@@ -48,46 +48,76 @@ which have solutions
 
 with the frequency $\omega = \gamma B_0$. When comparing the exact solution with the numerical estimate obtained through integrating the LLG-equation with Heun's method, the trajectories of $S_x$ and $S_y$ are as shown in figure \ref{fig:comp}.
 
+%\begin{figure}[htb]
+%	\centering
+%	\begin{minipage}{0.49\columnwidth}
+%	\centering
+%	\includegraphics[width =\columnwidth]{../fig/err_heun.pdf}
+%	\captionof{figure}{Error as a function of step length for Heun's method.}
+%	\label{fig:err_heun}
+%	\end{minipage}
+%	\hfill
+%	\begin{minipage}{0.49\columnwidth}
+%	\centering
+%	\includegraphics[width = \columnwidth]{../fig/err_euler.pdf}
+%	\captionof{figure}{Error as a function of step length for Euler's method.}
+%	\label{fig:err_euler}
+%	\end{minipage}
+%\end{figure}
+
 \begin{figure}[htb]
 	\centering
-	\includegraphics[width=0.8\columnwidth]{../fig/comparison.pdf}
-	\caption{The plot shows the exact solution given in \eqref{eq:exact_1} and \eqref{eq:exact_2} compared with the numerical solution sampled at every tenth step to be able to distinguish the paths.}
+	\begin{minipage}{0.49\columnwidth}
+	\includegraphics[width=\columnwidth]{../fig/comparison.pdf}
+	\captionof{figure}{The plot shows the exact solution given in \eqref{eq:exact_1} and \eqref{eq:exact_2} compared with the numerical solution sampled at every tenth step to be able to distinguish the paths.}
 	\label{fig:comp}
-\end{figure} 
-
-It is perhaps more enlightening to consider the pointwise difference of the exact and numerical solution. This is shown in figure \ref{fig:comp_diff}. The figure shows that the deviations locally oscillate, and that the absolute global deviations increase with time as we'd expect. Further considerations on the deviations are considered in \ref{sec:error}.
-
-\begin{figure}[htb]
+	\end{minipage}
+	\hfill
 	\centering
-	\includegraphics[width=0.8\columnwidth]{../fig/comparison_diff.pdf}
+	\begin{minipage}{0.49\columnwidth}
+	\includegraphics[width=\columnwidth]{../fig/comparison_diff.pdf}
 	\caption{The plot shows the difference between the exact solutions given in \eqref{eq:exact_1} and \eqref{eq:exact_2}, and the numerical solutions over one period.}
 	\label{fig:comp_diff}
+	\end{minipage}
 \end{figure} 
+It is perhaps more enlightening to consider the pointwise difference of the exact and numerical solution. This is shown in figure \ref{fig:comp_diff}. The figure shows that the deviations locally oscillate, and that the absolute global deviations increase with time as we'd expect. Further considerations on the deviations are considered in \ref{sec:error}.
+
 
 \subsection{Error analysis}\label{sec:error}
 
 For the error analysis, I choose $10$ logarithmically spaced step-lengths from $10^{-5}$ to $10^{-1}$. As a measure of the \textit{global error}, that is the cumulated error over one period. The error as a function of step length is shown in figure \ref{fig:err_heun}.
+\begin{figure}[htb]
+		\centering
+		\includegraphics[width =0.8\columnwidth]{../fig/err_heun.pdf}
+		\caption{Error as a function of step length for Heun's method.}
+		\label{fig:err_heun}
+\end{figure}
+%\begin{figure}[htb]
+%	\centering
+%	\begin{minipage}{0.49\columnwidth}
+%	\centering
+%	\includegraphics[width =\columnwidth]{../fig/err_heun.pdf}
+%	\captionof{figure}{Error as a function of step length for Heun's method.}
+%	\label{fig:err_heun}
+%	\end{minipage}
+%	\hfill
+%	\begin{minipage}{0.49\columnwidth}
+%	\centering
+%	\includegraphics[width = \columnwidth]{../fig/err_euler.pdf}
+%	\captionof{figure}{Error as a function of step length for Euler's method.}
+%	\label{fig:err_euler}
+%	\end{minipage}
+%\end{figure}
+Since Heun's method is of second order, we would expect its slope in a log-log plot to be roughly $2$. Comparing to the line $\sim h^2$ shows that this is the case, at least for reasonably large $h$. In figure \ref{fig:err_heun} we notice that the error line seems to have a kink for very low step lengths. This can be understood by the fact that the round-off error done by the machine pollutes the numerical calculation. As a rough estimate of the pollution: for $h = 1\cdot 10^{-5}$ we do roughly $60\,000$ steps on one period. If the round-off error in each step is $\approx 10^{-15}$ we would expect an accumulated error of $\approx 6\cdot 10^{-11}$, which indeed is comparable to the error at $h = 10^{-5}$ in figure \ref{fig:err_heun}.  
+
+In figure \ref{fig:err_euler} we have plotted the errors for Euler's method for the same step lengths. This plot clearly demonstrates the well known fact that Euler's method is of order $1$. Notice that the error never becomes so small as to be affected by numerical round-off error done by the machine.
 
 \begin{figure}[htb]
 	\centering
-	\begin{minipage}{0.49\columnwidth}
-	\centering
-	\includegraphics[width =\columnwidth]{../fig/err_heun.pdf}
-	\captionof{figure}{Error as a function of step length for Heun's method.}
-	\label{fig:err_heun}
-	\end{minipage}
-	\hfill
-	\begin{minipage}{0.49\columnwidth}
-	\centering
-	\includegraphics[width = \columnwidth]{../fig/err_euler.pdf}
-	\captionof{figure}{Error as a function of step length for Euler's method.}
+	\includegraphics[width =0.8\columnwidth]{../fig/err_euler.pdf}
+	\caption{Error as a function of step length for Euler's method.}
 	\label{fig:err_euler}
-	\end{minipage}
 \end{figure}
-Since Heun's method is of second order, we would expect its slope in a log-log plot to be roughly $2$. However, as demonstrated in figure \ref{fig:err_heun}, the slope is slightly less than $2$. This is due to \textcolor{red}{FIND REASON FOR THIS}. In figure \ref{fig:err_euler} we have plotted the errors for Euler's method for the same step lengths. This plot clearly demonstrates the well known fact that Euler's method is of order $1$.
-
-
-
 
 \subsection{Damped precession of spin in magnetic field}
 

@@ -1,23 +1,16 @@
 \section{The spin chain}
 
-\subsection{Ground states}
+\subsection{Ground states}\label{sec:groundstates}
 
-In this section we initialise $10$ spins in random directions and simulate the time evolution for $J <0$ and $J>0$. The plots of the $z$-component of each of the spins over time is shown in figure \ref{fig:ferro} and \ref{fig:antiferro}. What is evident from these plots is that a positive coupling constant $J$ tends to make the spins align with their neighbours, while the negative constant tends to make them oppose them. This is a fact that is readily seen from inspecting the hamiltonian in \eqref{eq:hamiltionian}, since a positive $J$ makes the maximum of $\sum_{j,k} \mathbf{S}_j \cdot \mathbf{S}_k$ most energetically favourable, while a negative one makes its minimum most favourable. These two cases correspond to a ferromagnetic and anti-ferromagnetic system respectively.
+In this section we initialise $10$ spins in random directions and simulate the time evolution for $J <0$ and $J>0$. The plots of the $z$-component of each of the spins over time is shown in figure \ref{fig:gs}. What is evident from these plots is that a positive coupling constant $J$ tends to make the spins align with their neighbours, while the negative constant tends to make them oppose them. This is a fact that is readily seen from inspecting the hamiltonian in \eqref{eq:hamiltionian}, since a positive $J$ makes the maximum of $\sum_{j,k} \mathbf{S}_j \cdot \mathbf{S}_k$ most energetically favourable, while a negative one makes its minimum most favourable. These two cases correspond to a ferromagnetic and anti-ferromagnetic system respectively.
 
 The reason for this being apparent when only plotting the $S_z$-component is the non-zero anisotropy-constant $d_z$. As seen from the hamiltonian, setting this positive will favour spins in the $z$-direction. This is also the reason that approximately half of the spins in the case of $J<0$ being directed along $\mathbf{e}_z$ while the others are directed along $-\mathbf{e}_z$.
 
 \begin{figure}[htb]
 	\centering
-	\includegraphics[width=\columnwidth]{../fig/gs_ferro.pdf}
-	\caption{The figure shows the plot of the $z$-component of the spin of $10$ spins in a system of positive coupling constant $J > 0$.}
-	\label{fig:ferro}
-\end{figure}
-
-\begin{figure}[htb]
-	\centering
-	\includegraphics[width=\columnwidth]{../fig/gs_antiferro.pdf}
-	\caption{The figure shows the plot of the $z$-component of the spin of $10$ spins in a system of negative coupling constant $J < 0$.}
-	\label{fig:antiferro}
+	\includegraphics[width=\columnwidth]{../fig/gs.pdf}
+	\caption{The figure shows the plot of the $z$-component of $10$ spins in a system of positive and negative coupling constant.}
+	\label{fig:gs}
 \end{figure}
 
 \subsection{The magnon}
@@ -44,14 +37,14 @@ Next, we initialise all the spins along the $z$ direction except for one of them
 
 \subsubsection{Coupled system}
 
-If we repeat the procedure used in the previous section except that we couple the spins with $J > 0$, we will observe that all the spins will start to precess, even if they are initialised along the $z$-axis. This is shown in figure \ref{fig:coupled_precessions}. Since the time evolution is hard to catch on a $2\mathrm{d}$ plot I have made a video showing the same as figure \ref{fig:coupled_precessions} \href{https://folk.ntnu.no/sondrdl/spinwaves/coupled.mp4}{here}. What is apparent here is that the neighbouring spins couple to each other. Since we are dealing with a finite system, I have chosen to use periodic boundary conditions, so that the first spin affects the last one and vice versa. Implementing this in python requires no effort at all as we can access the left hand neighbour of spin \texttt{i} with \texttt{i-1} regardless of the value of \texttt{i}, and the right hand neighbour with \texttt{(i-1)\%n} where \texttt{n} is the number of spins. This looks a bit artificial in the video, but it corresponds physically to arranging the linear chain in a circle. Another choice of boundary conditions is to simply say that the first and last spin only has \textit{one} neighbour. 
+If we repeat the procedure used in the previous section except that we couple the spins with $J > 0$, we will observe that all the spins will start to precess, even if they are initialised along the $z$-axis. Since the time evolution is hard to catch on a $2\mathrm{d}$ plot I have made a video showing it \href{https://folk.ntnu.no/sondrdl/spinwaves/coupled.mp4}{here}. It is also shown in figure \ref{fig:damped_heat} as a heat map. What is apparent here is that the neighbouring spins couple to each other. Since we are dealing with a finite system, I have chosen to use periodic boundary conditions, so that the first spin affects the last one and vice versa. Implementing this in python requires no effort at all as we can access the left hand neighbour of spin \texttt{i} with \texttt{i-1} regardless of the value of \texttt{i}, and the right hand neighbour with \texttt{(i-1)\%n} where \texttt{n} is the number of spins. This looks a bit artificial in the video, but it corresponds physically to arranging the linear chain in a circle. Another choice of boundary conditions is to simply say that the first and last spin only has \textit{one} neighbour. 
 
-\begin{figure}[htb]
-	\centering
-	\includegraphics[width=\columnwidth]{../fig/10_precessions_coupled.pdf}
-	\caption{The figure shows coupled oscillations of the spins. A video displaying the same data set can be found \href{https://folk.ntnu.no/sondrdl/spinwaves/coupled.mp4}{here}.}
-	\label{fig:coupled_precessions}
-\end{figure}
+%\begin{figure}[htb]
+%	\centering
+%	\includegraphics[width=\columnwidth]{../fig/10_precessions_coupled.pdf}
+%	\caption{The figure shows coupled oscillations of the spins. A video displaying the same data set can be found \href{https://folk.ntnu.no/sondrdl/spinwaves/coupled_spins.mp4}{here}.}
+%	\label{fig:coupled_precessions}
+%\end{figure}
 
 If we are to simulate an infinite system we obviously cannot use a discrete model. However, the simulations above suggests that in the limit of \textit{many} spins we can describe the chain as a continuous wave. Then we would have to associate to every index $j$ a position in space 
 $$
@@ -71,3 +64,22 @@ $$
 	\mathbf{S}_{j-1}(t) + \mathbf{S}_{j+1}(t) \to \mathbf{S}(\mathbf{x},t) + \mathbf{a} \cdot \boldsymbol{\nabla} \mathbf{S}(\mathbf{x},t) + \frac{\| \mathbf{a} \|^2}{2} \nabla^2 \mathbf{S}(\mathbf{x},t) + \mathcal{O}(\|\mathbf{a}\|^2).
 $$
 Hence, in the limit of small lattice spacings $\|\mathbf{a}\| \to 0$ it should be possible to recast the LLG equation in a continuous form, as a PDE rather than an ode. A self contained discussion of this can be found in \cite{Lakshmanan2011}.
+
+\subsubsection{Damped, coupled system}
+
+Based on the results from including damping on one spin and the behaviour of the magnon in the previous section we would expect the damped coupled system to show a collective wave motion whose amplitude eventually dies out. This is exactly what is observed in \href{https://folk.ntnu.no/sondrdl/spinwaves/coupled_spins_damped.mp4}{this} video showing the time evolution of the system. A heat map illustrating the same time evolution is shown in figure \ref{fig:damped_heat}. Here it is evident that the oscillations die out in the case of $\alpha = 0.1$ while they continue to propagate when $\alpha = 0$. Notice also that due to the periodic boundary conditions, there are two magnons propagating through the system. This is observed in the plot as the zigzag pattern, while in the video it is clear from the start that the initial perturbation also affects the last spin in the chain.
+
+\begin{figure}[htb]
+	\centering
+	\includegraphics[width=\columnwidth]{../fig/damped_vs_undamped.pdf}
+	\caption{The figure shows the amplitudes of coupled oscillations of the spins in the damped and un-damped case.}
+	\label{fig:damped_heat}
+\end{figure}
+
+\subsubsection{Antiferromagnetic coupling, $J<0$}
+
+The case of $J<0$ is very similar to the case considered in \ref{sec:groundstates}. The video of the time evolution corresponding to this case can be found \href{https://folk.ntnu.no/sondrdl/spinwaves/coupled_spins_anti.mp4}{here}. As one spin is tilted, the neighbours tend to oscillate in phase with their neighbours as opposed to the ferromagnetic case where the spins are repelled by their neighbours. 
+
+\subsubsection{Magnetisation}
+
+In section \ref{sec:groundstates} there is a net magnetisation only in the case where $J>0$, whereas it is zero when $J<0$. In the first case the magnetisation is either $-1$ or $1$, depending on the sign of the anisotropy constant $d_z$. In our case $d_z < 0$ so the equilibrium magnetisation is $-1$\footnote{This rather flimsily defined magnetisation we refer to is meant to be the average of the $z$-components of each spin.}. For the case of $J<0$, half of the spins will align along $+\mathbf{e}_z$ and the other half along $-\mathbf{e}_z$ as explained in section \ref{sec:groundstates}.

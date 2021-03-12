@@ -22,8 +22,9 @@ In the absence of noise, $\boldsymbol{\xi}_j \equiv 0$, we can find an explicit 
 	&= \sum_{i \in \mathcal{N}_j} J_{ij} \mathbf{S}_i + 2d_z S_{j,z} \mathbf{e}_z + \mu \mathbf{B}, 
 \end{align*}
 
-where we in the last transition have made further simplifications by only performing the sum over the nearest neighbours $\mathcal{N}_j$ of $j$. Using this expression we might rewrite the LLG in \eqref{eq:llg} as
-\begin{align*}\label{eq:llg_simplified}
-	\der{\mathbf{S}_j}{t} = \frac{-\gamma}{\mu(1 + \alpha^2)} \Bigg[ \mathbf{S}_j &\times \left( \sum_{i \in \mathcal{N}_j} J_{ij} \mathbf{S}_i + 2d_z S_{j,z} \mathbf{e}_z + \mu \mathbf{B} \right) \\
-	+ \alpha \mathbf{S}_j \times \Bigg[  \mathbf{S}_j  &\times \left( \sum_{i \in \mathcal{N}_j} J_{ij} \mathbf{S}_i + 2d_z S_{j,z} \mathbf{e}_z + \mu \mathbf{B} \right) \Bigg] \Bigg].
-\end{align*}
+where we in the last transition have made further simplifications by only performing the sum over the nearest neighbours $\mathcal{N}_j$ of $j$. Using this expression we may rewrite the LLG in \eqref{eq:llg} as
+\begin{align}\label{eq:llg_simplified}
+	\der{\mathbf{S}_j}{t} = \frac{-\gamma}{\mu(1 + \alpha^2)} \Bigg[ \mathbf{S}_j &\times \left( \sum_{i \in \mathcal{N}_j} J_{ij} \mathbf{S}_i + 2d_z S_{j,z} \mathbf{e}_z + \mu \mathbf{B} \right) \nonumber \\
+	+ \alpha \mathbf{S}_j \times \Bigg[  \mathbf{S}_j  &\times \left( \sum_{i \in \mathcal{N}_j} J_{ij} \mathbf{S}_i + 2d_z S_{j,z} \mathbf{e}_z + \mu \mathbf{B} \right) \Bigg] \Bigg]. 
+\end{align}
+It is the form of the LLG in equation \ref{eq:llg_simplified} that we will use in the implementation.
