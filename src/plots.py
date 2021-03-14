@@ -77,9 +77,9 @@ def compare_analytical():
 
 def plot_error():
 
-    hs = np.load("../data/hs.npy")
-    errs = np.load("../data/errs.npy")
-    times = np.load("../data/times.npy")
+    hs = np.load("../data/hs_j.npy")
+    errs = np.load("../data/errs_j.npy")
+    times = np.load("../data/times_j.npy")
     
     fig1, ax = plt.subplots()
 
@@ -387,7 +387,7 @@ def plot_coupled():
 def plot_heat_timeevo():
 
     S1 =  np.load("../data/X_coupled.npy")
-    S2 =  np.load("../data/X_coupled_alpha=0.1.npy")
+    S2 =  np.load("../data/X_coupled_alpha=0.05.npy")
 
     x1 = S1[0:4000:,:,0]
     x2 = S2[0:4000:,:,0]
@@ -407,7 +407,7 @@ def plot_heat_timeevo():
 
     ax = plt.subplot(gs[:7, 1])
 
-    ax.set_title(r"$\alpha = 0.1$")
+    ax.set_title(r"$\alpha = 0.05$")
     im = ax.imshow(x2)
     ax.set_xlabel(r"Particle index")
     ax.set_ylabel(r"Timestep")

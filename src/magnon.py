@@ -1,4 +1,5 @@
 from ode import *
+import numba as nb
 
 J  = 0
 d  = 0
@@ -21,15 +22,20 @@ def H(S):
 
     return ss + s2 + sb
 
+@nb.jit(nopython = True)
 def djH(S,j,n):
-    ss = J * np.sum(S[[j-1,(j+1)%n],:], axis = 0) # sum over nearest neighbours
+    ss = J * (S[j-1,:] + S[(j+1)%n,:] ) # sum over nearest neighbours
     return ss + 2* d*S[j,2] * e_z + mu * B
-    
+
+@nb.jit(nopython = True)
 def gradH(S,n):
-    return np.array([ djH(S,j,n) for j in range(n)])
+    dH = np.zeros((n,3))
+    for j in range(n):
+        dH[j,:] = djH(S,j,n)
+    return dH
 
-
-def f_llg(t,S,**kwargs):
+@nb.jit(nopython = True)
+def f_llg(t,S):
     n = np.shape(S)[0] # number of spins
     dH = gradH(S,n)
     return C * (np.cross(S,dH) + alpha * np.cross(S, np.cross(S, dH) ) )

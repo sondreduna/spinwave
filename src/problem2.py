@@ -61,7 +61,7 @@ def precession_coupled():
 
     # choosing only one tilted spin
     S_  = initial_cond(0.1,0.5) 
-    S_0 = np.zeros((10,3))
+    S_0 = np.zeros((num_spins,3))
     S_0[:,2] = 1 # initialise all others to point in the z direction
     S_0[0] = S_
 
@@ -78,7 +78,7 @@ def precession_coupled_damped():
 
     # choosing only one tilted spin
     S_  = initial_cond(0.1,0.5) 
-    S_0 = np.zeros((10,3))
+    S_0 = np.zeros((num_spins,3))
     S_0[:,2] = 1 # initialise all others to point in the z direction
     S_0[0] = S_
 
@@ -103,11 +103,32 @@ def precession_coupled_anti():
     Ts,Xs = spinsolver()
 
     np.save("../data/X_coupled_anti.npy",Xs)
+
+
+def many_spins_coupled():
+    num_spins = 201
+    params = {'d':1,'J':1,'mu':1,'B':np.array([0,0,0]),'alpha':0}
+
+    # choosing only one tilted spin
+    #S_  = initial_cond(0.4,0.5) 
+    #S_0 = np.zeros((num_spins,3))
+    #S_0[:,2] = 1 # initialise all others to point in the z direction
+    #S_0[num_spins//2] = S_ # set the perturbation on the middle point
+
+    # random inital perturbation:
+    angs = np.random.random((2,num_spins))*2*np.pi
+    S_0  = np.array([initial_cond(t,p) for (t,p) in angs.T])
+    
+    spinsolver = MagnonSolver(0,S_0,10*np.pi,0.01,"Heun",**params)
+    Ts,Xs = spinsolver()
+
+    np.save("../data/X_coupled200.npy",Xs)
     
 if __name__ == "__main__":
 
     #ground_states()
     #precession_uncoupled()
     precession_coupled()
-    precession_coupled_damped()
-    precession_coupled_anti()
+    #precession_coupled_damped()
+    #precession_coupled_anti()
+    #many_spins_coupled()

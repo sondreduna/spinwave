@@ -35,9 +35,9 @@ Next, we initialise all the spins along the $z$ direction except for one of them
 	\label{fig:precessions}
 \end{figure}
 
-\subsubsection{Coupled system}
+\subsubsection{Coupled system, $J > 0$}
 
-If we repeat the procedure used in the previous section except that we couple the spins with $J > 0$, we will observe that all the spins will start to precess, even if they are initialised along the $z$-axis. Since the time evolution is hard to catch on a $2\mathrm{d}$ plot I have made a video showing it \href{https://folk.ntnu.no/sondrdl/spinwaves/coupled.mp4}{here}. It is also shown in figure \ref{fig:damped_heat} as a heat map. What is apparent here is that the neighbouring spins couple to each other. Since we are dealing with a finite system, I have chosen to use periodic boundary conditions, so that the first spin affects the last one and vice versa. Implementing this in python requires no effort at all as we can access the left hand neighbour of spin \texttt{i} with \texttt{i-1} regardless of the value of \texttt{i}, and the right hand neighbour with \texttt{(i-1)\%n} where \texttt{n} is the number of spins. This looks a bit artificial in the video, but it corresponds physically to arranging the linear chain in a circle. Another choice of boundary conditions is to simply say that the first and last spin only has \textit{one} neighbour. 
+If we repeat the procedure used in the previous section except that we couple the spins with $J > 0$, we will observe that all the spins will start to precess, even if they are initialised along the $z$-axis. Since the time evolution is hard to catch on a $2\mathrm{d}$ plot I have made a video showing it \href{https://folk.ntnu.no/sondrdl/spinwaves/coupled_spins.mp4}{here}. It is also shown in figure \ref{fig:damped_heat} as a heat map. What is apparent here is that the neighbouring spins couple to each other. Since we are dealing with a finite system, I have chosen to use periodic boundary conditions, so that the first spin affects the last one and vice versa. Implementing this in python requires no effort at all as we can access the left hand neighbour of spin \texttt{i} with \texttt{i-1} regardless of the value of \texttt{i}, and the right hand neighbour with \texttt{(i-1)\%n} where \texttt{n} is the number of spins. This looks a bit artificial in the video, but it corresponds physically to arranging the linear chain in a circle. Another choice of boundary conditions is to simply say that the first and last spin only has \textit{one} neighbour. 
 
 %\begin{figure}[htb]
 %	\centering
@@ -63,16 +63,23 @@ we see that
 $$
 	\mathbf{S}_{j-1}(t) + \mathbf{S}_{j+1}(t) \to \mathbf{S}(\mathbf{x},t) + \mathbf{a} \cdot \boldsymbol{\nabla} \mathbf{S}(\mathbf{x},t) + \frac{\| \mathbf{a} \|^2}{2} \nabla^2 \mathbf{S}(\mathbf{x},t) + \mathcal{O}(\|\mathbf{a}\|^2).
 $$
-Hence, in the limit of small lattice spacings $\|\mathbf{a}\| \to 0$ it should be possible to recast the LLG equation in a continuous form, as a PDE rather than an ode. A self contained discussion of this can be found in \cite{Lakshmanan2011}.
+Hence, in the limit of small lattice spacings $\|\mathbf{a}\| \to 0$ it should be possible to recast the LLG equation in a continuous form, as a PDE rather than an ode. A self contained discussion of this can be found in \cite{Lakshmanan2011}. To see the connection between this system and continuous waves qualitatively we simulate coupled system of $201$ spins and excite the centre of the system. The heatmap showing the time evolution is shown in figure \ref{fig:200_heat}.
+
+\begin{figure}[htb]
+	\centering
+	\includegraphics[width=\columnwidth]{../fig/wave_200.pdf}
+	\caption{The figure shows the amplitudes of coupled oscillations of $201$ spins.}
+	\label{fig:200_heat}
+\end{figure}
 
 \subsubsection{Damped, coupled system}
 
-Based on the results from including damping on one spin and the behaviour of the magnon in the previous section we would expect the damped coupled system to show a collective wave motion whose amplitude eventually dies out. This is exactly what is observed in \href{https://folk.ntnu.no/sondrdl/spinwaves/coupled_spins_damped.mp4}{this} video showing the time evolution of the system. A heat map illustrating the same time evolution is shown in figure \ref{fig:damped_heat}. Here it is evident that the oscillations die out in the case of $\alpha = 0.1$ while they continue to propagate when $\alpha = 0$. Notice also that due to the periodic boundary conditions, there are two magnons propagating through the system. This is observed in the plot as the zigzag pattern, while in the video it is clear from the start that the initial perturbation also affects the last spin in the chain.
+Based on the results from including damping on one spin and the behaviour of the magnon in the previous section we would expect the damped coupled system to show a collective wave motion whose amplitude eventually dies out. This is exactly what is observed in \href{https://folk.ntnu.no/sondrdl/spinwaves/coupled_spins_damped.mp4}{this} video showing the time evolution of the system when we set $\alpha = 0.1$. A heat map illustrating the same time evolution only with slightly less damping is shown in figure \ref{fig:damped_heat}. Here it is evident that the oscillations die out in the case of $\alpha = 0.05$ while they continue to propagate when $\alpha = 0$. Notice also that due to the periodic boundary conditions, there are two magnons propagating through the system. This is observed in the plot as the zigzag pattern, while in the video it is clear from the start that the initial perturbation also affects the last spin in the chain.
 
 \begin{figure}[htb]
 	\centering
 	\includegraphics[width=\columnwidth]{../fig/damped_vs_undamped.pdf}
-	\caption{The figure shows the amplitudes of coupled oscillations of the spins in the damped and un-damped case.}
+	\caption{The figure shows the amplitudes of coupled oscillations of the spins for $\alpha = 0$ and $\alpha = 0.05$ given the same initial conditions.}
 	\label{fig:damped_heat}
 \end{figure}
 

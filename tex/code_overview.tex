@@ -1,3 +1,38 @@
 \section{General structure}
 
 \section{Remarks on performance}
+
+When doing the error-calculation in section \ref{sec:error} I found that my \texttt{python} implementation of the solver was pretty slow for the smallest time steps. This is probably due to the function being implemented in a quite general way so that it is easy to change the parameters of the problem. This is however not convenient when considering that we waste a lot of time calculating certain products which are later multiplied by zero and hence don't contribute. For instance, when using $h = 10^{-5}$ the naive \texttt{python} solution produces
+\begin{lstlisting}
+S_0 = np.array([initial_cond(0.1,0.5)])
+params = {'d':0,'J':0,'mu':1,'B':np.array([0,0,1.]),'alpha':0}
+tN = 2*np.pi
+spinsolver_heun = MagnonSolver(0,S_0,tN,1e-5,"Heun",**params)
+%time spinsolver_heun();
+\end{lstlisting}
+\texttt{\small
+	CPU times: user 2min 57s, sys: 507 ms, total: 2min 58s
+	Wall time: 2min 57s
+}
+
+A large improvement is gained by compiling parts of the calculation with \texttt{numba}. However, trying to use \texttt{@jit} on self defined objects turns out to be quite messy, so a large part of the main calulcations could not be just-in-time compiled in my case without rewriting the whole implementation. Running the same code as above with just-in-time compilation used on only the function, $\mathbf{f}(t,\mathbf{y})$, defining the ode 
+$$
+	\der{\mathbf{y}}{t} = \mathbf{f}(t,\mathbf{y})
+$$	 
+produces
+
+\texttt{\small CPU times: user 10.5 s, sys: 624 ms, total: 11.2 s
+Wall time: 10.4 s
+}
+
+For the error analysis in particular, I wanted a faster implementation. Since this case only included $1$ spin and only the effect of the $\mathbf{B}$-field, I wrote a simple implementation in \texttt{julia} for this specific case. This implementation is manifestly not general. Changing the parameters requires writing a new implementation of $\mathbf{f}$, and so on. However, it does perform extremely well compared to the \texttt{python}-version:
+
+\begin{lstlisting}
+	tN  = 2 * pi
+	S_0 = initial_cond(0.1,0.5)
+	S_0 = reshape(S_0,(3,1))
+	@time magnon_integrate(S_0,0,tN,1e-5,f_llg,heun);
+\end{lstlisting}
+\texttt{\small 0.994903 seconds (16.34 M allocations: 1.124 GiB, 6.69\% gc time)}
+
+Since we are mostly dealing with small systems in this project I found the \texttt{python} solution to be well suited and efficient enough. Moreover, it is easier to use than my implementation in \texttt{julia} which requires making new implementations of $\mathbf{f}$ for each specific case. At any rate, my time is more valuable than the computer's. 
