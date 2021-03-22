@@ -13,7 +13,7 @@ def ground_states():
     S_0 = np.array([initial_cond(thetas[i],phis[i]) for i in range(num_spins)])
 
     spinsolver = MagnonSolver(0,S_0,20*np.pi,0.01,"Heun",**params)
-    Ts,Xs = spinsolver()
+    Ts,Xs = spinsolver(True)
 
     np.save(f"../data/S_gs_ferro.npy",Xs)
     np.save(f"../data/T_gs.npy",Ts)
@@ -23,7 +23,7 @@ def ground_states():
     params = {'d':0.1,'J':-1,'mu':1,'B':np.array([0,0,0]),'alpha':0.05}
 
     spinsolver = MagnonSolver(0,S_0,20*np.pi,0.01,"Heun",**params)
-    Ts,Xs = spinsolver()
+    Ts,Xs = spinsolver(True)
 
     np.save(f"../data/S_gs_antiferro.npy",Xs)
 
@@ -50,7 +50,7 @@ def precession_uncoupled():
     S_0[0] = S_
 
     spinsolver = MagnonSolver(0,S_0,2*np.pi,0.01,"Heun",**params)
-    Ts,Xs = spinsolver()
+    Ts,Xs = spinsolver(True)
 
     np.save("../data/X_precession_tiltone.npy",Xs)
 
@@ -66,7 +66,7 @@ def precession_coupled():
     S_0[0] = S_
 
     spinsolver = MagnonSolver(0,S_0,10*np.pi,0.01,"Heun",**params)
-    Ts,Xs = spinsolver()
+    Ts,Xs = spinsolver(True)
 
     np.save("../data/X_coupled.npy",Xs)
 
@@ -83,7 +83,7 @@ def precession_coupled_damped():
     S_0[0] = S_
 
     spinsolver = MagnonSolver(0,S_0,10*np.pi,0.01,"Heun",**params)
-    Ts,Xs = spinsolver()
+    Ts,Xs = spinsolver(True)
 
     np.save("../data/X_coupled_alpha=0.1.npy",Xs)
 
@@ -100,7 +100,7 @@ def precession_coupled_anti():
     S_0[0] = S_
 
     spinsolver = MagnonSolver(0,S_0,10*np.pi,0.01,"Heun",**params)
-    Ts,Xs = spinsolver()
+    Ts,Xs = spinsolver(True)
 
     np.save("../data/X_coupled_anti.npy",Xs)
 
@@ -120,7 +120,7 @@ def many_spins_coupled():
     S_0  = np.array([initial_cond(t,p) for (t,p) in angs.T])
     
     spinsolver = MagnonSolver(0,S_0,10*np.pi,0.01,"Heun",**params)
-    Ts,Xs = spinsolver()
+    Ts,Xs = spinsolver(True)
 
     np.save("../data/X_coupled200.npy",Xs)
     
@@ -128,7 +128,7 @@ if __name__ == "__main__":
 
     #ground_states()
     #precession_uncoupled()
-    precession_coupled()
+    #precession_coupled()
     #precession_coupled_damped()
     #precession_coupled_anti()
     #many_spins_coupled()

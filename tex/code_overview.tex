@@ -1,7 +1,20 @@
 \section{General structure}
 
-\section{Remarks on performance}
+The main machinery in this code is found in \texttt{ode.py}. This contains a simple object oriented implementation of an ODE-solver. The child \texttt{MagnonSolver} of the \texttt{ODESolver} is used to solve the LLG, with the only difference being that it allows for an extra dimension of data corresponding to the spin index, and it unpacks parameters fed into the constructor which describes the hamiltonian of the system. To do a simulation of a system of spins, create an initial state of the system \texttt{S0}, given as a $n\times3$ array where $n$ is the number of spins. Next, specify the start and end time \texttt{t0}, \texttt{tN} and the step length \texttt{h}. Also, specify the parameters describing the problem \texttt{d}, \texttt{J}, \texttt{mu}, \texttt{B} and \texttt{alpha} in a dictionary \texttt{params}. To create an object for the solver, then use
 
+\begin{lstlisting}[language=Python]
+solver = MagnonSolver(t0,S0,tN,h,"Heun",**params)
+\end{lstlisting}
+ 
+and do the integration by simply calling the object
+
+\begin{lstlisting}[language=Python]
+T, S = solver(verbose = True)
+\end{lstlisting}
+
+which returns the array of the time steps, \texttt{T}, and the spins, \texttt{S}, at each time step with the first index representing the time step. 
+
+\section{Remarks on performance}
 When doing the error-calculation in section \ref{sec:error} I found that my \texttt{python} implementation of the solver was pretty slow for the smallest time steps. This is probably due to the function being implemented in a quite general way so that it is easy to change the parameters of the problem. This is however not convenient when considering that we waste a lot of time calculating certain products which are later multiplied by zero and hence don't contribute. For instance, when using $h = 10^{-5}$ the naive \texttt{python} solution produces
 \begin{lstlisting}
 S_0 = np.array([initial_cond(0.1,0.5)])
@@ -15,7 +28,7 @@ spinsolver_heun = MagnonSolver(0,S_0,tN,1e-5,"Heun",**params)
 	Wall time: 2min 57s
 }
 
-A large improvement is gained by compiling parts of the calculation with \texttt{numba}. However, trying to use \texttt{@jit} on self defined objects turns out to be quite messy, so a large part of the main calulcations could not be just-in-time compiled in my case without rewriting the whole implementation. Running the same code as above with just-in-time compilation used on only the function, $\mathbf{f}(t,\mathbf{y})$, defining the ode 
+A large improvement is gained by compiling parts of the calculation with \texttt{numba}. However, trying to use \texttt{@jit} on methods in self defined objects turns out to be quite messy, so a large part of the main calulcations could not be just-in-time compiled in my case without rewriting the whole implementation. Running the same code as above with just-in-time compilation used on only the function, $\mathbf{f}(t,\mathbf{y})$, defining the ode 
 $$
 	\der{\mathbf{y}}{t} = \mathbf{f}(t,\mathbf{y})
 $$	 
@@ -25,13 +38,12 @@ produces
 Wall time: 10.4 s
 }
 
-For the error analysis in particular, I wanted a faster implementation. Since this case only included $1$ spin and only the effect of the $\mathbf{B}$-field, I wrote a simple implementation in \texttt{julia} for this specific case. This implementation is manifestly not general. Changing the parameters requires writing a new implementation of $\mathbf{f}$, and so on. However, it does perform extremely well compared to the \texttt{python}-version:
+For the error analysis in particular, I wanted a faster implementation. Since this case only included $1$ spin and only the effect of the $\mathbf{B}$-field, I wrote a simple implementation in \texttt{julia} for this specific case. This implementation is albeit not general; changing the parameters requires writing a new implementation of $\mathbf{f}$, and so on. However, it does perform extremely well compared to the \texttt{python}-version:
 
 \begin{lstlisting}
-	tN  = 2 * pi
-	S_0 = initial_cond(0.1,0.5)
-	S_0 = reshape(S_0,(3,1))
-	@time magnon_integrate(S_0,0,tN,1e-5,f_llg,heun);
+tN  = 2 * pi
+S_0 = initial_cond(0.1,0.5)
+@time magnon_integrate(S_0,0,tN,1e-5,f_llg,heun);
 \end{lstlisting}
 \texttt{\small 0.994903 seconds (16.34 M allocations: 1.124 GiB, 6.69\% gc time)}
 

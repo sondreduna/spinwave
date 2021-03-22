@@ -61,7 +61,7 @@ def damping():
     for a in alphas:
         params = {'d':0,'J':0,'mu':1,'B':np.array([0,0,1.]),'alpha':a}
         spinsolver = MagnonSolver(0,S_0,10*np.pi,h,"Heun",**params)
-        Ts, Xs = spinsolver()
+        Ts, Xs = spinsolver(verbose = True)
 
         np.save(f"../data/X_a={a}.npy",Xs)
         np.save(f"../data/T_damp.npy",Ts) # only need the times one of the runs

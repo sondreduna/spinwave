@@ -37,7 +37,7 @@ Next, we initialise all the spins along the $z$ direction except for one of them
 
 \subsubsection{Coupled system, $J > 0$}
 
-If we repeat the procedure used in the previous section except that we couple the spins with $J > 0$, we will observe that all the spins will start to precess, even if they are initialised along the $z$-axis. Since the time evolution is hard to catch on a $2\mathrm{d}$ plot I have made a video showing it \href{https://folk.ntnu.no/sondrdl/spinwaves/coupled_spins.mp4}{here}. It is also shown in figure \ref{fig:damped_heat} as a heat map. What is apparent here is that the neighbouring spins couple to each other. Since we are dealing with a finite system, I have chosen to use periodic boundary conditions, so that the first spin affects the last one and vice versa. Implementing this in python requires no effort at all as we can access the left hand neighbour of spin \texttt{i} with \texttt{i-1} regardless of the value of \texttt{i}, and the right hand neighbour with \texttt{(i-1)\%n} where \texttt{n} is the number of spins. This looks a bit artificial in the video, but it corresponds physically to arranging the linear chain in a circle. Another choice of boundary conditions is to simply say that the first and last spin only has \textit{one} neighbour. 
+If we repeat the procedure used in the previous section except that we couple the spins with $J > 0$, we will observe that all the spins will start to precess, even if they are initialised along the $z$-axis. Since the time evolution is hard to catch on a $2\mathrm{d}$ plot I have made a video showing it \href{https://folk.ntnu.no/sondrdl/spinwaves/coupled_spins.mp4}{here in $2$d} and \href{https://folk.ntnu.no/sondrdl/spinwaves/coupled_spins_3d.mp4}{here in $3$d}. It is also shown in figure \ref{fig:damped_heat} as a heat map. What is apparent here is that the neighbouring spins couple to each other. Since we are dealing with a finite system, I have chosen to use periodic boundary conditions, so that the first spin affects the last one and vice versa. Implementing this in python requires no effort at all as we can access the left hand neighbour of spin \texttt{i} with \texttt{i-1} regardless of the value of \texttt{i}, and the right hand neighbour with \texttt{(i-1)\%n} where \texttt{n} is the number of spins. This looks a bit artificial in the video, but it corresponds physically to arranging the linear chain in a circle. Another choice of boundary conditions is to simply say that the first and last spin only has \textit{one} neighbour. 
 
 %\begin{figure}[htb]
 %	\centering
@@ -45,6 +45,9 @@ If we repeat the procedure used in the previous section except that we couple th
 %	\caption{The figure shows coupled oscillations of the spins. A video displaying the same data set can be found \href{https://folk.ntnu.no/sondrdl/spinwaves/coupled_spins.mp4}{here}.}
 %	\label{fig:coupled_precessions}
 %\end{figure}
+
+\begin{remark}[Simulating an infinite system]
+
 
 If we are to simulate an infinite system we obviously cannot use a discrete model. However, the simulations above suggests that in the limit of \textit{many} spins we can describe the chain as a continuous wave. Then we would have to associate to every index $j$ a position in space 
 $$
@@ -63,7 +66,7 @@ we see that
 $$
 	\mathbf{S}_{j-1}(t) + \mathbf{S}_{j+1}(t) \to \mathbf{S}(\mathbf{x},t) + \mathbf{a} \cdot \boldsymbol{\nabla} \mathbf{S}(\mathbf{x},t) + \frac{\| \mathbf{a} \|^2}{2} \nabla^2 \mathbf{S}(\mathbf{x},t) + \mathcal{O}(\|\mathbf{a}\|^2).
 $$
-Hence, in the limit of small lattice spacings $\|\mathbf{a}\| \to 0$ it should be possible to recast the LLG equation in a continuous form, as a PDE rather than an ode. A self contained discussion of this can be found in \cite{Lakshmanan2011}. To see the connection between this system and continuous waves qualitatively we simulate coupled system of $201$ spins and excite the centre of the system. The heatmap showing the time evolution is shown in figure \ref{fig:200_heat}.
+Hence, in the limit of small lattice spacings $\|\mathbf{a}\| \to 0$ it should be possible to recast the LLG equation in a continuous form, as a PDE rather than an ode. A self contained discussion of this can be found in \cite{Lakshmanan2011}. To see the connection between this system and continuous waves qualitatively we simulate coupled system of $201$ spins and excite the spin at the centre of the system. The heatmap displaying the time evolution is shown in figure \ref{fig:200_heat}.
 
 \begin{figure}[htb]
 	\centering
@@ -71,6 +74,8 @@ Hence, in the limit of small lattice spacings $\|\mathbf{a}\| \to 0$ it should b
 	\caption{The figure shows the amplitudes of coupled oscillations of $201$ spins.}
 	\label{fig:200_heat}
 \end{figure}
+
+\end{remark}
 
 \subsubsection{Damped, coupled system}
 

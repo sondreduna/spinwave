@@ -62,13 +62,50 @@ def spin_snapshot(S):
     plt.close()
     return fig
 
+def spin_snapshot_3d(S):
+
+    u = S[:,0]
+    v = S[:,1]
+    w = S[:,2]
+    
+    fig = plt.figure(figsize = (15,10))
+    ax = fig.gca(projection='3d')
+
+    ax.set_xlim3d(-0.1, 0.1)
+    ax.set_ylim3d(-1.25, 3.25)
+    ax.set_zlim3d(-0.1,1.1)
+
+    spins = np.size(u[:])
+
+    x = np.zeros_like(u)
+    y = np.linspace(0,2,spins)
+    z = np.zeros_like(u)
+
+    for i in range(spins):
+        ax.quiver(x[i],y[i],z[i],u[i],v[i],w[i],arrow_length_ratio = 0.01, color = "black") 
+
+    ax.azim = 20
+    ax.dist = 10
+    ax.elev = 25
+
+    plt.xticks(rotation=-45)
+    plt.yticks(rotation=45)
+
+    ax.set_xlabel("$S_x$",labelpad = 40)
+    ax.set_ylabel(r"$S_y + \mathrm{offset}$",labelpad = 40)
+    ax.set_zlabel("$S_z$")
+
+    plt.tight_layout()
+    plt.close()
+    return fig
+
 def spin_video(S,title,savepath):
 
     N = 400        # use 400 images per video
     S = S[::2,:,:] # use only every second image
     
-    for i in range(N):
-        fig = spin_snapshot(S[i,:,:])
+    for i in tqdm(range(N)):
+        fig = spin_snapshot_3d(S[i,:,:])
         fig.savefig(savepath+"img{0:0=3d}.png".format(i))
 
     img_name = savepath + "img%03d.png"
@@ -82,10 +119,10 @@ def spin_video(S,title,savepath):
 if __name__ == "__main__":
 
     S = np.load("../data/X_coupled.npy")
-    spin_video(S,"../fig/coupled_spins","/home/sondre/Pictures/figs_simulation/")
+    spin_video(S,"../fig/coupled_spins_3d","/home/sondre/Pictures/figs_simulation/")
 
-    S = np.load("../data/X_coupled_alpha=0.1.npy")
-    spin_video(S,"../fig/coupled_spins_damped","/home/sondre/Pictures/figs_simulation/")
+    #S = np.load("../data/X_coupled_alpha=0.1.npy")
+    #spin_video(S,"../fig/coupled_spins_damped","/home/sondre/Pictures/figs_simulation/")
 
-    S = np.load("../data/X_coupled_anti.npy")
-    spin_video(S,"../fig/coupled_spins_anti","/home/sondre/Pictures/figs_simulation/")
+    #S = np.load("../data/X_coupled_anti.npy")
+    #spin_video(S,"../fig/coupled_spins_anti","/home/sondre/Pictures/figs_simulation/")

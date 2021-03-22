@@ -13,10 +13,10 @@ function magnon_integrate(X_0,T_0,T_max,h,f,step)
     T = zeros(Float64, N+2)
     
     t = T_0
-    X[1,:] = X_0
+    X[1,:,:] = X_0
     for i ∈ 1:N+1
         h = min(h,T_max - t)
-        X[i+1,:] = step(t,X[i,:],h,f)
+        X[i+1,:,:] = step(t,X[i,:,:],h,f)
         T[i+1] = t + h
         t = T[i+1]
     end
@@ -27,14 +27,14 @@ end
 # Doing the error analysis in julia
 
 mu = 1
-B  = [0,0,1]
+B  = [0 0 1]
 gamma = 1
 
 function gradH(S,n)
     heff = mu .* B
-    H    = zeros(3,n)
+    H    = zeros(n,3)
     for i in 1:n
-        H[:,i] = heff
+        H[i,:] = heff
     end
     return H
 end
@@ -48,7 +48,7 @@ C = - gamma/mu
 n = 1
 
 function f_llg(t,S)
-    return C * ( cross(S[:,1],dH[:,1]) )
+    return reshape(C * ( cross(S[1,:],dH[1,:])),(1,3))
 end
 
 function initial_cond(theta,phi)
@@ -56,7 +56,7 @@ function initial_cond(theta,phi)
     y = sin(theta) * sin(phi)
     z = cos(theta)
 
-    return [x,y,z]
+    return [x y z]
 end
 
 function S_xy(wt,a,b)
@@ -72,8 +72,7 @@ function error_analysis(N)
     hs  = exp10.(range(-5,-1, length=N)) # logspace
     
     S_0 = initial_cond(0.1,0.5)
-    S_0 = reshape(S_0,(3,1))
-    S_a = S_xy(tN,S_0[1,1],S_0[2,1]) # analytical sol at endpoint
+    S_a = S_xy(tN,S_0[1,1],S_0[1,2]) # analytical sol at endpoint
 
     errs = zeros(2,2,N) # global errors
     times = zeros(2,N)  # runtimes
@@ -91,11 +90,11 @@ function error_analysis(N)
 
         times[2,i] = toc - tic
 
-        errs[1,1,i] = abs(S_a[1] - X_heun[end,1])
-        errs[1,2,i] = abs(S_a[2] - X_heun[end,2])
+        errs[1,1,i] = abs(S_a[1] - X_heun[end,1,1])
+        errs[1,2,i] = abs(S_a[2] - X_heun[end,1,2])
 
-        errs[2,1,i] = abs(S_a[1] - X_euler[end,1])
-        errs[2,2,i] = abs(S_a[2] - X_euler[end,2])
+        errs[2,1,i] = abs(S_a[1] - X_euler[end,1,1])
+        errs[2,2,i] = abs(S_a[2] - X_euler[end,1,2])
     end
     npzwrite("../data/hs_j.npy",hs)
     npzwrite("../data/errs_j.npy",errs)

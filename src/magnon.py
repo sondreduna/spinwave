@@ -74,6 +74,3 @@ class MagnonSolver(ODESolver):
         mu = kwargs["mu"]
         B = kwargs["B"]
         alpha = kwargs["alpha"]
-
-
-    

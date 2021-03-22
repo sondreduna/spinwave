@@ -43,37 +43,32 @@ def compare_analytical():
     
     S_a = S_xy(T,S[0,0,0],S[0,0,1])
 
-    fig = plt.figure()
+    fig, ax = plt.subplots(ncols = 2, figsize= (20,8))
     
-    plt.plot(T[::10],S[::10,0,0],".",label = r"$S_{x,\mathrm{heun}}$",color ="red")
-    plt.plot(T,S_a[0], label  = r"$S_{x,\mathrm{exact}}$",color ="red", ls ="--")
+    ax[0].plot(T[::10],S[::10,0,0],".",label = r"$S_{x,\mathrm{heun}}$",color ="red")
+    ax[0].plot(T,S_a[0], label  = r"$S_{x,\mathrm{exact}}$",color ="red", ls ="--")
 
-    plt.plot(T[::10],S[::10,0,1],".",label = r"$S_{y,\mathrm{heun}}$",color ="blue")
-    plt.plot(T,S_a[1], label  = r"$S_{y,\mathrm{exact}}$",color ="blue", ls ="--")
+    ax[0].plot(T[::10],S[::10,0,1],".",label = r"$S_{y,\mathrm{heun}}$",color ="blue")
+    ax[0].plot(T,S_a[1], label  = r"$S_{y,\mathrm{exact}}$",color ="blue", ls ="--")
 
-    plt.xlabel(r"$\omega t$")
-    plt.ylabel(r"$S$")
-    plt.grid(ls ="--")
+    ax[0].set_xlabel(r"$\omega t$")
+    ax[0].set_ylabel(r"$S$")
+    ax[0].grid(ls ="--")
     
-    plt.legend()
+    ax[0].legend()
+
+    ax[1].plot(T,S[:,0,0] - S_a[0],label = r"$S_{x,\mathrm{heun}} -S_{x,\mathrm{exact}} $",color ="red")
+    ax[1].plot(T,S[:,0,1] - S_a[1],label = r"$S_{y,\mathrm{heun}} -S_{y,\mathrm{exact}} $",color ="blue")
+
+    ax[1].set_xlabel(r"$\omega t$")
+    ax[1].set_ylabel(r"$\Delta S$")
+    ax[1].grid(ls ="--")
+    
+    ax[1].legend()
+
     plt.tight_layout()
 
     fig.savefig("../fig/comparison.pdf")
-
-    fig2 = plt.figure()
-    
-    plt.plot(T,S[:,0,0] - S_a[0],label = r"$S_{x,\mathrm{heun}} -S_{x,\mathrm{exact}} $",color ="red")
-
-    plt.plot(T,S[:,0,1] - S_a[1],label = r"$S_{y,\mathrm{heun}} -S_{y,\mathrm{exact}} $",color ="blue")
-
-    plt.xlabel(r"$\omega t$")
-    plt.ylabel(r"$\Delta S$")
-    plt.grid(ls ="--")
-    
-    plt.legend()
-    plt.tight_layout()
-
-    fig2.savefig("../fig/comparison_diff.pdf")
 
 def plot_error():
 
@@ -150,7 +145,7 @@ def plot_error():
 
     ax2.set_ylabel(r"Runtime [s]")
     ax2.set_yscale("log")
-    lns4 = ax2.plot(hs,times[0,:],".",label = "Euler runtime",color = "black")
+    lns4 = ax2.plot(hs,times[1,:],".",label = "Euler runtime",color = "black")
 
     # gathering all the labels
     lns = lns1+lns2+lns3+lns4

@@ -1,4 +1,5 @@
 import numpy as np
+from tqdm import trange
 
 class ODEStep:
 
@@ -14,17 +15,19 @@ class ODEStep:
 
         """
         raise NotImplementedError
-
+    
 class HeunStep(ODEStep):
 
     def __call__(self):
         t,y,h = self.t, self.y, self.h
-        
-        y_p = y + h * self.f(t, y)
 
-        self.y = y + h/2 * (self.f(t,y) + self.f(t + h, y_p))
+        f_call = self.f(t, y)
+        y_p = y + h * f_call
+
+        self.y = y + h/2 * (f_call + self.f(t + h, y_p))
         self.t += h
         return self.y
+
 
 class RK4Step(ODEStep):
 
@@ -70,13 +73,18 @@ class ODESolver:
         self.Y = np.zeros((self.N + 2, self.shape))
         self.T = np.zeros(self.N + 2)
 
-    def __call__(self):
+    def __call__(self,verbose = False):
         self.Y[0] = self.step.y
-
-        for i in range(1,self.N + 2):
-            self.step.h = min(self.step.h, self.tN - self.T[i-1])
-            self.Y[i] = self.step()
-            self.T[i] = self.T[i-1] + self.step.h 
+        if verbose:
+            for i in trange(1,self.N+2):
+                self.step.h = min(self.step.h, self.tN - self.T[i-1])
+                self.Y[i] = self.step()
+                self.T[i] = self.T[i-1] + self.step.h
+        else:
+            for i in range(1,self.N+2):
+                self.step.h = min(self.step.h, self.tN - self.T[i-1])
+                self.Y[i] = self.step()
+                self.T[i] = self.T[i-1] + self.step.h 
 
         return self.T, self.Y
         
