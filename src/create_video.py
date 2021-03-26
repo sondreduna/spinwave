@@ -1,6 +1,4 @@
 from magnon import *
-
-
 import matplotlib.pyplot as plt
 from matplotlib import rc
 from time import time
@@ -8,6 +6,7 @@ from mpl_toolkits.mplot3d import Axes3D
 from tqdm import tqdm
 import matplotlib.gridspec as gridspec
 import matplotlib as mpl
+from multiprocessing import Pool
 
 rc("text",usetex = True)
 rc("font",family = "sans-serif")
@@ -99,13 +98,16 @@ def spin_snapshot_3d(S):
     plt.close()
     return fig
 
-def spin_video(S,title,savepath):
+def spin_video(S,title,savepath,threed = False):
 
     N = 400        # use 400 images per video
     S = S[::2,:,:] # use only every second image
     
     for i in tqdm(range(N)):
-        fig = spin_snapshot_3d(S[i,:,:])
+        if threed:
+            fig = spin_snapshot_3d(S[i,:,:])
+        else:
+            fig = spin_snapshot(S[i,:,:])
         fig.savefig(savepath+"img{0:0=3d}.png".format(i))
 
     img_name = savepath + "img%03d.png"
@@ -119,7 +121,7 @@ def spin_video(S,title,savepath):
 if __name__ == "__main__":
 
     S = np.load("../data/X_coupled.npy")
-    spin_video(S,"../fig/coupled_spins_3d","/home/sondre/Pictures/figs_simulation/")
+    spin_video(S,"../fig/coupled_spins_3d","/home/sondre/Pictures/figs_simulation/",True)
 
     #S = np.load("../data/X_coupled_alpha=0.1.npy")
     #spin_video(S,"../fig/coupled_spins_damped","/home/sondre/Pictures/figs_simulation/")

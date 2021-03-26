@@ -12,7 +12,7 @@ and do the integration by simply calling the object
 T, S = solver(verbose = True)
 \end{lstlisting}
 
-which returns the array of the time steps, \texttt{T}, and the spins, \texttt{S}, at each time step with the first index representing the time step. 
+which returns the array of the time steps, \texttt{T}, and the spins, \texttt{S}, at each time step with the first index representing the time step. The optional keyword \texttt{verbose} is default \texttt{false}, and outputs a progress-bar if \texttt{true}. To create an initial spin state with unit length one can use the function \texttt{initial\textunderscore cond}, which takes as arguments the azimuthal and polar angle, $\theta$ and $\varphi$ and outputs the point on the $2$-sphere corresponding to these angles. 
 
 \section{Remarks on performance}
 When doing the error-calculation in section \ref{sec:error} I found that my \texttt{python} implementation of the solver was pretty slow for the smallest time steps. This is probably due to the function being implemented in a quite general way so that it is easy to change the parameters of the problem. This is however not convenient when considering that we waste a lot of time calculating certain products which are later multiplied by zero and hence don't contribute. For instance, when using $h = 10^{-5}$ the naive \texttt{python} solution produces
@@ -37,6 +37,23 @@ produces
 \texttt{\small CPU times: user 10.5 s, sys: 624 ms, total: 11.2 s
 Wall time: 10.4 s
 }
+
+As a curiosity, I can also mentioned that replacing \texttt{np.cross} by the self-made function \texttt{cross} shown below produces a speed-up by approximately a factor of 2.
+\begin{lstlisting}[language = Python]
+def cross(A,B):
+	return np.einsum('ijk,...j,...k',eijk,A,B)
+\end{lstlisting}
+
+This is based on the general expression
+$$
+	\mathbf{A} \times \mathbf{B} = \mathbf{e}_i \epsilon_{ijk} A_j B_k,
+$$
+where $\epsilon_{ijk}$ is the Levi-Civita tensor, represented in python as simply a $3\times3\times3$ array:
+\begin{lstlisting}
+eijk = np.zeros((3,3,3))
+eijk[0, 1, 2] = eijk[1, 2, 0] = eijk[2, 0, 1] = 1
+eijk[0, 2, 1] = eijk[2, 1, 0] = eijk[1, 0, 2] = -1
+\end{lstlisting}
 
 For the error analysis in particular, I wanted a faster implementation. Since this case only included $1$ spin and only the effect of the $\mathbf{B}$-field, I wrote a simple implementation in \texttt{julia} for this specific case. This implementation is albeit not general; changing the parameters requires writing a new implementation of $\mathbf{f}$, and so on. However, it does perform extremely well compared to the \texttt{python}-version:
 

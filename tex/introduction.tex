@@ -2,14 +2,14 @@
 
 The hamiltonian governing the dynamics of a chain of spins is
 \begin{equation}\label{eq:hamiltionian}
-	H = - \frac{1}{2} \sum_{j,k}^{N} J_{jk} \mathbf{S}_j \cdot \mathbf{S}_k - d_z \sum_{j=1}^{N} (S_{j,z})^2 - \mu \sum_{j=1}^{N} \mathbf{B}_j \cdot \mathbf{S}_j,
+	H = - \frac{1}{2} \sum_{j,k}^{N} J_{jk} \mathbf{S}_j \cdot \mathbf{S}_k - d_z \sum_{j=1}^{N} (S_{j,z})^2 - \mu \sum_{j=1}^{N} \mathbf{B}_j \cdot \mathbf{S}_j.
 \end{equation}
 
-And the time-dependence is governed by the Landau-Lifshitz-Gilbert equation (LLG) 
+The time-dependence is governed by the Landau-Lifshitz-Gilbert equation (LLG) 
 \begin{equation}\label{eq:llg}
 	\der{\mathbf{S}_j}{t} = \frac{-\gamma}{\mu(1 + \alpha^2)} \left[ \mathbf{S}_j \times \mathbf{H}_j + \alpha \mathbf{S}_j \times (\mathbf{S}_j \times \mathbf{H}_j) \right]
 \end{equation}
-where
+where the \textit{effective field} $\mathbf{H}_j$ for spin $j$ is given by
 \begin{equation}\label{eq:ef_field}
 	\mathbf{H}_j = -\pd{H}{\mathbf{S}_j} + \boldsymbol{\xi}_j.
 \end{equation}
@@ -27,7 +27,7 @@ This can be shown by simply performing the derivatives
 	&= \frac{1}{2}\sum_{i,k}^{N} J_{ik} \left( \delta_{ij} \mathbf{S}_k + \delta_{jk} \mathbf{S}_i \right) + d_z \sum_{i=1}^N 2 \delta_{ij} (\mathbf{S}_i \cdot \mathbf{e}_z) \mathbf{e}_z + \mu \sum_{i=1}^N \mathbf{B}_i \delta_{ij} \\
 	&= \sum_{i=1}^N J_{ij} \mathbf{S}_i + 2d_z S_{j,z} \mathbf{e}_z + \mu \mathbf{B},
 \end{align*}
-which is the required result.
+as advertised.
 \end{proof}
 We make further simplifications by only performing the sum in the effective field \eqref{eq:ef_field_simp} over the set of nearest neighbours $\mathcal{N}_j$ of $j$.
 Using this expression we may rewrite the LLG in \eqref{eq:llg} as

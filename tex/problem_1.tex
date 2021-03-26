@@ -107,13 +107,14 @@ In figure \ref{fig:err_euler} we have plotted the errors for Euler's method for 
 \begin{remark}
 	Going even further down in step length for Heun's method would result in errors eventually starting to increase for decreasing step lengths as the numerical round-off error becomes larger than the numerical error. To find the ideal step length, one should examine the numerical error and find the minimum as a function of step length. 
 	
-	One could also do this analytically: What we seek is an upper bound for the global error as a function of $h$, $e(h)$, given that we can only calculate a number in the computer up to some number $\delta$, of the order of the machine round off error. Including the round-off error is not entirely straight forward, but in essence one can derive an expression along the lines of 
+	One could also do this analytically: What we seek is an upper bound for the global error as a function of $h$, $e(h)$, given that we can only calculate a number in the computer up to some number $\delta$, of the order of the machine round off error. Including the round-off error is not entirely straight forward, but roughly speaking, one can derive an expression along the lines of 
+	\textcolor{red}{Do some more investigation on this, and try to find some source that verifies the claimed form of the error.}
 	$$
-		e(h; \delta) = M_1 h^2 + \frac{M_2}{h} \delta, 
+		e(h; \delta) \leq M_1 h^p + \frac{M_2}{h} \delta, 
 	$$ 
-	where $M_1$ and $M_2$ are constants depending on the function $\mathbf{f}$ defining the ODE, its derivatives and the length of the integration interval. The numerical error of the method is $\mathcal{O}(h^2)$ while the error introduced by round-off in the computer must scale approximately like $\frac{\delta}{h}$. If one manages to find the constants $M_1$ and $M_2$ (or some bounds of them), the ideal step length is approximately given by 
+	where $p$ is the order of the method, $M_1$ and $M_2$ are constants depending on the function $\mathbf{f}$ defining the ODE, its derivatives and the length of the integration interval. The global truncation error of the method is $\mathcal{O}(h^p)$ while the error introduced by round-off in the computer must scale approximately like $\frac{\delta}{h}$, since $h\sim N^{-1}$. If one manages to find the constants $M_1$ and $M_2$ (or some bounds of them), the ideal step length is approximately given by 
 	$$
-		h_{\text{ideal}} \approx \left( \frac{M_2 \delta}{2 M_1}  \right)^{1/3}.
+		h_{\text{ideal}} \approx \left( \frac{M_2 \delta}{p M_1}  \right)^{1/(p+1)}.
 	$$
 	This is however not embarked on here, as step lengths $\in (10^{-3},10^{-2})$ give more than good enough results for us to study the physical properties of the system of spins.
 \end{remark}
@@ -132,6 +133,8 @@ Next, we include damping in the model. This amounts to setting $\alpha \neq 0$. 
 	\pm \sqrt{S_x^2 + S_y^2} \exp{\left(-\alpha \omega t\right)},
 \]
 which is approximately the shape of the envelope in the presence of damping.  
+
+\textcolor{red}{Is this the exact damping envelope ? Try to find the correct one if not.}
 
 \begin{figure}[htb]
 	\centering

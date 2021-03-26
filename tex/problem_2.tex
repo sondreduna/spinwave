@@ -4,7 +4,7 @@
 
 In this section we initialise $10$ spins in random directions and simulate the time evolution for $J <0$ and $J>0$. The plots of the $z$-component of each of the spins over time is shown in figure \ref{fig:gs}. What is evident from these plots is that a positive coupling constant $J$ tends to make the spins align with their neighbours, while the negative constant tends to make them oppose them. This is a fact that is readily seen from inspecting the hamiltonian in \eqref{eq:hamiltionian}, since a positive $J$ makes the maximum of $\sum_{j,k} \mathbf{S}_j \cdot \mathbf{S}_k$ most energetically favourable, while a negative one makes its minimum most favourable. These two cases correspond to a ferromagnetic and anti-ferromagnetic system respectively.
 
-The reason for this being apparent when only plotting the $S_z$-component is the non-zero anisotropy-constant $d_z$. As seen from the hamiltonian, setting this positive will favour spins in the $z$-direction. This is also the reason that approximately half of the spins in the case of $J<0$ being directed along $\mathbf{e}_z$ while the others are directed along $-\mathbf{e}_z$.
+The reason for this being apparent when only plotting the $S_z$-component is the non-zero anisotropy-constant $d_z$. \textcolor{red}{As seen from the hamiltonian, setting this positive will favour spins in the $z$-direction}. This is also the reason that approximately half of the spins in the case of $J<0$ being directed along $\mathbf{e}_z$ while the others are directed along $-\mathbf{e}_z$.
 
 \begin{figure}[htb]
 	\centering
@@ -48,23 +48,20 @@ If we repeat the procedure used in the previous section except that we couple th
 
 \begin{remark}[Simulating an infinite system]
 
+\textcolor{red}{NB Check this again. The error should not be of the same order as the last step}
 
-If we are to simulate an infinite system we obviously cannot use a discrete model. However, the simulations above suggests that in the limit of \textit{many} spins we can describe the chain as a continuous wave. Then we would have to associate to every index $j$ a position in space 
+If we are to simulate an infinite system we obviously cannot use a discrete model. However, the simulations above suggests that in the limit of \textit{many} spins we can describe the chain as a continuous wave. This suggests that there is a continuum a version of the system in this regime. Then we would have to associate to every index $j$ a position in space 
 $$
 	\mathbf{S}_j(t) \to \mathbf{S}(\mathbf{x},t) \quad ; \quad j \to \mathbf{x},
 $$
-where $\mathbf{x}$ is the position of spin $j$.
-If we approximate the directional derivatives along a lattice vector $\mathbf{a}$ by the finite differences 
+where $\mathbf{x}$ is the position of spin $j$. For simplicity, we assume the spins are distributed on a $1$-dimensional lattice of lattice spacing $a$. 
+If we approximate the second derivative by the finite differences 
 $$
-	 \|\mathbf{a}\|^2  \nabla^2 \mathbf{S}(\mathbf{x},t) \approx \|\mathbf{a}\|^2 \frac{\mathbf{S}(\mathbf{x} - \mathbf{a},t) - 2 \mathbf{S}(\mathbf{x},t) + \mathbf{S}(\mathbf{x} + \mathbf{a},t) }{ \| \mathbf{a} \|^2}
+	  \pdd{\mathbf{S}}{x}(x,t) = \frac{\mathbf{S}(x - a,t) - 2 \mathbf{S}(x,t) + \mathbf{S}(x + a,t) }{ a^2} + \mathcal{O}(a^2)
 $$
-and 
+we see that the nearest neighbour sum in \eqref{eq:llg_simplified} can be expressed as
 $$
-	\mathbf{a} \cdot \boldsymbol{\nabla} \mathbf{S}(\mathbf{x},t) \approx \|\mathbf{a}\| \frac{\mathbf{S}(\mathbf{x}+\mathbf{a},t) - \mathbf{S}(\mathbf{x}-\mathbf{a},t)}{2\|\mathbf{a}\|},
-$$
-we see that 
-$$
-	\mathbf{S}_{j-1}(t) + \mathbf{S}_{j+1}(t) \to \mathbf{S}(\mathbf{x},t) + \mathbf{a} \cdot \boldsymbol{\nabla} \mathbf{S}(\mathbf{x},t) + \frac{\| \mathbf{a} \|^2}{2} \nabla^2 \mathbf{S}(\mathbf{x},t) + \mathcal{O}(\|\mathbf{a}\|^2).
+	\mathbf{S}_{j-1}(t) + \mathbf{S}_{j+1}(t) \to \mathbf{S}(x-a,t) + \mathbf{S}(x+a,t) = 2 \mathbf{S}(x,t) + a^2 \pdd{\mathbf{S}}{x} (x,t) + \mathcal{O}(a^4)
 $$
 Hence, in the limit of small lattice spacings $\|\mathbf{a}\| \to 0$ it should be possible to recast the LLG equation in a continuous form, as a PDE rather than an ode. A self contained discussion of this can be found in \cite{Lakshmanan2011}. To see the connection between this system and continuous waves qualitatively we simulate coupled system of $201$ spins and excite the spin at the centre of the system. The heatmap displaying the time evolution is shown in figure \ref{fig:200_heat}.
 
@@ -93,5 +90,7 @@ Based on the results from including damping on one spin and the behaviour of the
 The case of $J<0$ is very similar to the case considered in \ref{sec:groundstates}. The video of the time evolution corresponding to this case can be found \href{https://folk.ntnu.no/sondrdl/spinwaves/coupled_spins_anti.mp4}{here}. As one spin is tilted, the neighbours tend to oscillate in phase with their neighbours as opposed to the ferromagnetic case where the spins are repelled by their neighbours. 
 
 \subsubsection{Magnetisation}
+
+\textcolor{red}{Check the statement about $d_z$, and write some more details on the magnetisation. Define the term.}
 
 In section \ref{sec:groundstates} there is a net magnetisation only in the case where $J>0$, whereas it is zero when $J<0$. In the first case the magnetisation is either $-1$ or $1$, depending on the sign of the anisotropy constant $d_z$. In our case $d_z < 0$ so the equilibrium magnetisation is $-1$\footnote{This rather flimsily defined magnetisation we refer to is meant to be the average of the $z$-components of each spin.}. For the case of $J<0$, half of the spins will align along $+\mathbf{e}_z$ and the other half along $-\mathbf{e}_z$ as explained in section \ref{sec:groundstates}.

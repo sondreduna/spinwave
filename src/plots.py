@@ -7,6 +7,9 @@ import matplotlib.gridspec as gridspec
 import matplotlib as mpl
 import numpy as np
 
+from scipy.stats import linregress
+from mpltools.annotation import slope_marker
+
 rc("text",usetex = True)
 rc("font",family = "sans-serif")
 
@@ -28,8 +31,13 @@ newparams = {'axes.titlesize': fontsize,
 
 plt.rcParams.update(newparams)
 
-## Problem 1 
+## Problem 1
 
+def log_slope(x,y):
+    x = np.log(x)
+    y = np.log(y)
+    return ((x*y).mean() - x.mean()*y.mean()) / ((x**2).mean() - (x.mean())**2)
+    
 def S_xy(wt,a,b):
     x = a*np.cos(wt) - b*np.sin(wt)
     y = b*np.cos(wt) + a*np.sin(wt)
@@ -88,23 +96,24 @@ def plot_error():
     lns1 = ax.plot(hs,
             errs[0,0,:],
             label = "Heun $x$",
-            ls = "--",
             color="red",
             marker="o")
     lns2 = ax.plot(hs,
             errs[0,1,:],
             label = "Heun $y$",
-            ls = "--",
             color="blue",
             marker = "o")
 
-    lns3 = ax.plot(hs,hs**2, label = r"$\sim h^2$",ls = "-.",color = "green")
-
+    r1 = round(log_slope(hs,errs[0,1,:]),2)
+    slope_marker((hs[-3],errs[0,1,-3]),(r1,1), text_kwargs = {'fontsize': fontsize,'fontfamily':'serif'})
+    
+    lns3 = ax.plot(hs,hs**2, label = r"$\sim h^2$",ls = "--",color = "green")
+    
     ax2 = ax.twinx()
 
     ax2.set_ylabel(r"Runtime [s]")
     ax2.set_yscale("log")
-    lns4 = ax2.plot(hs,times[0,:],".",label = "Heun runtime",color = "black")
+    lns4 = ax2.plot(hs,times[0,:],"1",label = "Heun runtime",color = "black")
 
     # Gathering all the labels
     lns = lns1+lns2+lns3+lns4
@@ -120,32 +129,33 @@ def plot_error():
     fig2, ax = plt.subplots()
 
     plt.grid(ls ="--")
-
+    ax.set_yscale("log")
+    ax.set_xscale("log")
     ax.set_xlabel(r"$h$")
     ax.set_ylabel(r"Global error")
+
 
     lns1 = ax.plot(hs,
             errs[1,0,:],
             label = "Euler $x$",
-            ls = "--",
             color = "red",
             marker = "o")
     lns2 = ax.plot(hs,
             errs[1,1,:],
             label = "Euler $y$",
-            ls = "--",
             color = "blue",
             marker = "o")
 
-    ax.set_yscale("log")
-    ax.set_xscale("log")
-    lns3 = ax.plot(hs,hs, label = r"$\sim h$",ls = "-.",color = "green")
+    r2 = round(log_slope(hs,errs[1,1,:]),2)
+    slope_marker((hs[-3],errs[1,1,-3]),(r2,1),  text_kwargs = {'fontsize': fontsize,'fontfamily':'serif'})
+
+    lns3 = ax.plot(hs,hs, label = r"$\sim h$",ls = "--",color = "green")
 
     ax2 = ax.twinx()
 
     ax2.set_ylabel(r"Runtime [s]")
     ax2.set_yscale("log")
-    lns4 = ax2.plot(hs,times[1,:],".",label = "Euler runtime",color = "black")
+    lns4 = ax2.plot(hs,times[1,:],"1",label = "Euler runtime",color = "black")
 
     # gathering all the labels
     lns = lns1+lns2+lns3+lns4
@@ -157,6 +167,7 @@ def plot_error():
 
     fig2.tight_layout()
     fig2.savefig("../fig/err_euler.pdf")
+    
 def exp_fit(T,alpha,S_0):
 
     return np.linalg.norm(S_0[:2]) * np.exp(-alpha*T)
@@ -215,8 +226,8 @@ def plot_damping():
     ax3 = plt.subplot(gs[1,1])
 
     ax3.set_title(r"$\alpha = 0.5$")
-    ax3.plot(T,X3[:,0,0], label =r"$S_x$", color = "blue")
-    ax3.plot(T,X3[:,0,1], label =r"$S_y$", color = "red")
+    ax3.plot(T,X3[:,0,0], label =r"$S_x$", color = "red")
+    ax3.plot(T,X3[:,0,1], label =r"$S_y$", color = "blue")
     ax3.plot(T,fit_3,
              color ="blue",
              ls = "--",lw = 1)
