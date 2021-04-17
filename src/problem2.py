@@ -11,8 +11,9 @@ def ground_states():
     phis   = np.random.random(num_spins) * np.pi 
     
     S_0 = np.array([initial_cond(t,f) for (t,f) in zip(thetas,phis)])
+    T_end = 100*np.pi
 
-    spinsolver = MagnonSolver(0,S_0,20*np.pi,0.001,"Heun",**params)
+    spinsolver = MagnonSolver(0,S_0,T_end,0.001,"Heun",**params)
     Ts,Xs = spinsolver(True)
 
     np.save(f"../data/S_gs_ferro.npy",Xs)
@@ -21,7 +22,7 @@ def ground_states():
     # Repeat for J < 0
     
     params["J"] = -1.0
-    spinsolver = MagnonSolver(0,S_0,20*np.pi,0.001,"Heun",**params)
+    spinsolver = MagnonSolver(0,S_0,T_end,0.001,"Heun",**params)
 
     # Recompile the compiled functions to update the parameter correctly !
     
@@ -66,7 +67,7 @@ def precession_coupled():
     params = {'d':1,'J':1,'mu':1,'B':np.array([0,0,0]),'alpha':0}
 
     # choosing only one tilted spin
-    S_  = initial_cond(np.pi/6,0.5) 
+    S_  = initial_cond(0.15,0.5) 
     S_0 = np.zeros((num_spins,3))
     S_0[:,2] = 1 # initialise all others to point in the z direction
     S_0[0] = S_
@@ -75,6 +76,7 @@ def precession_coupled():
     Ts,Xs = spinsolver(True)
 
     np.save("../data/X_coupled.npy",Xs)
+    np.save("../data/T_coupled.npy",Ts)
 
 
 def precession_coupled_damped():
@@ -132,9 +134,9 @@ def many_spins_coupled():
     
 if __name__ == "__main__":
 
-    ground_states()
+    #ground_states()
     #precession_uncoupled()
-    #precession_coupled()
+    precession_coupled()
     #precession_coupled_damped()
     #precession_coupled_anti()
     #many_spins_coupled()

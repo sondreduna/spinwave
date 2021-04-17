@@ -108,7 +108,7 @@ In figure \ref{fig:err_euler} we have plotted the errors for Euler's method for 
 	Going even further down in step length for Heun's method would result in errors eventually starting to increase for decreasing step lengths as the numerical round-off error becomes larger than the numerical error. To find the ideal step length, one should examine the numerical error and find the minimum as a function of step length. 
 	
 	One could also do this analytically: What we seek is an upper bound for the global error as a function of $h$, $e(h)$, given that we can only calculate a number in the computer up to some number $\delta$, of the order of the machine round off error. Including the round-off error is not entirely straight forward, but roughly speaking, one can derive an expression along the lines of 
-	\textcolor{red}{Do some more investigation on this, and try to find some source that verifies the claimed form of the error.}
+	%\textcolor{red}{Do some more investigation on this, and try to find some source that verifies the claimed form of the error.}
 	$$
 		e(h; \delta) \leq M_1 h^p + \frac{M_2}{h} \delta, 
 	$$ 
@@ -134,7 +134,7 @@ Next, we include damping in the model. This amounts to setting $\alpha \neq 0$. 
 \]
 which is approximately the shape of the envelope in the presence of damping.  
 
-\textcolor{red}{Is this the exact damping envelope ? Try to find the correct one if not.}
+%\textcolor{red}{Is this the exact damping envelope ? Try to find the correct one if not.}
 
 \begin{figure}[htb]
 	\centering

@@ -47,10 +47,10 @@ class HeunStep(ODEStep):
     def __call__(self):
         t,y,h = self.t, self.y, self.h
 
-        f_call = self.f(t, y)
-        y_p = y + h * f_call
+        y_e = self.f(t, y)
+        y_p = y + h * y_e
 
-        self.y = y + h/2 * (f_call + self.f(t + h, y_p))
+        self.y = y + h/2 * (y_e + self.f(t + h, y_p))
         self.t += h
         return self.y
 

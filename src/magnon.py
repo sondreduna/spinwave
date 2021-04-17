@@ -24,9 +24,10 @@ eijk[0, 2, 1] = eijk[2, 1, 0] = eijk[1, 0, 2] = -1
 def cross(A,B):
     """
     Cross product of A and B. Last dimension of B and A must be either 3 or 2.
-    Some testing indicates that this is actually more efficient than np.cross. Se remarks in report.
+    Some testing indicates that this is actually more efficient than np.cross.
+    Se remarks in report for more details.
     """
-    return np.einsum('ijk,...j,...k',eijk,B,A)
+    return np.einsum('ijk,...j,...k',eijk,A,B)
 
 def H(S):
     """

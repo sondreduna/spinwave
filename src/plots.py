@@ -10,9 +10,6 @@ import numpy as np
 from scipy.stats import linregress
 from mpltools.annotation import slope_marker
 
-rc("text",usetex = True)
-rc("font",family = "sans-serif")
-
 fontsize = 24
 newparams = {'axes.titlesize': fontsize,
              'axes.labelsize': fontsize,
@@ -53,10 +50,10 @@ def compare_analytical():
 
     fig, ax = plt.subplots(ncols = 2, figsize= (20,8))
     
-    ax[0].plot(T[::10],S[::10,0,0],".",label = r"$S_{x,\mathrm{heun}}$",color ="red")
+    ax[0].plot(T[::20],S[::20,0,0],".",label = r"$S_{x,\mathrm{heun}}$",color ="red")
     ax[0].plot(T,S_a[0], label  = r"$S_{x,\mathrm{exact}}$",color ="red", ls ="--")
 
-    ax[0].plot(T[::10],S[::10,0,1],".",label = r"$S_{y,\mathrm{heun}}$",color ="blue")
+    ax[0].plot(T[::20],S[::20,0,1],".",label = r"$S_{y,\mathrm{heun}}$",color ="blue")
     ax[0].plot(T,S_a[1], label  = r"$S_{y,\mathrm{exact}}$",color ="blue", ls ="--")
 
     ax[0].set_xlabel(r"$\omega t$")
@@ -251,7 +248,6 @@ def plot_ground_state():
     S_anti  = np.load("../data/S_gs_antiferro.npy")
     Ts      = np.load("../data/T_gs.npy")
 
-    # plotting for J > 0 
     fig, ax = plt.subplots(ncols = 2, figsize = (20,8),sharey=True)
 
     ax[0].set_title("$J > 0$")
@@ -431,3 +427,57 @@ def plot_heat_timeevo():
     plt.tight_layout()
 
     fig.savefig("../fig/damped_vs_undamped.pdf")
+
+def plot_magnetisation():
+    
+    S_ferro = np.load("../data/S_gs_ferro.npy")
+    S_anti  = np.load("../data/S_gs_antiferro.npy")
+    Ts      = np.load("../data/T_gs.npy")
+
+    M_ferro = np.mean(S_ferro[:,:,2], axis = 1)
+    M_anti  = np.mean(S_anti[:,:,2],  axis = 1)
+
+    fig, ax = plt.subplots(ncols = 2, figsize = (20,8),sharey=True)
+
+    ax[0].set_title("$J > 0$")
+
+    ax[0].plot(Ts, M_ferro,color="blue")
+    ax[0].set_xlabel("$t$")
+    ax[0].set_ylabel("$M(t)$")
+    ax[0].grid(ls = "--")
+
+    ax[1].set_title("$J < 0$")
+    ax[1].plot(Ts, M_anti,color="blue")
+    ax[1].set_xlabel("$t$")
+    ax[1].grid(ls = "--")
+
+    plt.tight_layout()
+    fig.savefig("../fig/magnetisation.pdf")
+
+    # magnetisation as a function of time for
+    # ferromagnetic coupled system
+    
+    S = np.load("../data/X_coupled.npy")
+    T = np.load("../data/T_coupled.npy")
+    M = np.mean(S[:,:,2], axis = 1)
+
+    fig, ax = plt.subplots(ncols = 2, figsize = (20,8))
+
+    ax[0].plot(T,M, label = "$M(t)$", color = "blue")
+    
+    ax[0].set_xlabel("$t$")
+    ax[0].set_ylabel("$M$")
+
+    ax[0].legend()
+    ax[0].grid(ls = "--")
+    
+    ax[1].plot(T,S[:,:,2])
+    ax[1].plot(T,M, color = "blue")
+    
+    ax[1].set_xlabel("$t$")
+    ax[1].set_ylabel("$S$")
+
+    ax[1].grid(ls = "--")
+    
+    plt.tight_layout()
+    fig.savefig("../fig/magnetisation_coupled.pdf")

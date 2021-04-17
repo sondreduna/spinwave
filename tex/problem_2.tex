@@ -4,7 +4,7 @@
 
 In this section we initialise $10$ spins in random directions and simulate the time evolution for $J <0$ and $J>0$. The plots of the $z$-component of each of the spins over time is shown in figure \ref{fig:gs}. What is evident from these plots is that a positive coupling constant $J$ tends to make the spins align with their neighbours, while the negative constant tends to make them oppose them. This is a fact that is readily seen from inspecting the hamiltonian in \eqref{eq:hamiltionian}, since a positive $J$ makes the maximum of $\sum_{j,k} \mathbf{S}_j \cdot \mathbf{S}_k$ most energetically favourable, while a negative one makes its minimum most favourable. These two cases correspond to a ferromagnetic and anti-ferromagnetic system respectively.
 
-The reason for this being apparent when only plotting the $S_z$-component is the non-zero anisotropy-constant $d_z$. \textcolor{red}{As seen from the hamiltonian, setting this positive will favour spins in the $z$-direction}. This is also the reason that approximately half of the spins in the case of $J<0$ being directed along $\mathbf{e}_z$ while the others are directed along $-\mathbf{e}_z$.
+The reason for this being apparent when only plotting the $S_z$-component is the non-zero anisotropy-constant $d_z$. As seen from the hamiltonian, setting this positive will favour spins along either $+\mathbf{e}_z$ or $-\mathbf{e}_z$. This is also the reason that approximately half of the spins in the case of $J<0$ being directed along $\mathbf{e}_z$ while the others are directed along $-\mathbf{e}_z$.
 
 \begin{figure}[htb]
 	\centering
@@ -37,7 +37,7 @@ Next, we initialise all the spins along the $z$ direction except for one of them
 
 \subsubsection{Coupled system, $J > 0$}
 
-If we repeat the procedure used in the previous section except that we couple the spins with $J > 0$, we will observe that all the spins will start to precess, even if they are initialised along the $z$-axis. Since the time evolution is hard to catch on a $2\mathrm{d}$ plot I have made a video showing it \href{https://folk.ntnu.no/sondrdl/spinwaves/coupled_spins.mp4}{here in $2$d} and \href{https://folk.ntnu.no/sondrdl/spinwaves/coupled_spins_3d.mp4}{here in $3$d}. It is also shown in figure \ref{fig:damped_heat} as a heat map. What is apparent here is that the neighbouring spins couple to each other. Since we are dealing with a finite system, I have chosen to use periodic boundary conditions, so that the first spin affects the last one and vice versa. Implementing this in python requires no effort at all as we can access the left hand neighbour of spin \texttt{i} with \texttt{i-1} regardless of the value of \texttt{i}, and the right hand neighbour with \texttt{(i-1)\%n} where \texttt{n} is the number of spins. This looks a bit artificial in the video, but it corresponds physically to arranging the linear chain in a circle. Another choice of boundary conditions is to simply say that the first and last spin only has \textit{one} neighbour. 
+If we repeat the procedure used in the previous section except that we couple the spins with $J > 0$, we will observe that all the spins will start to precess, even if they are initialised along the $z$-axis. Since the time evolution is hard to catch on a $2\mathrm{d}$ plot I have made a video showing it \href{https://folk.ntnu.no/sondrdl/spinwaves/coupled_spins.mp4}{here in $2$d} and \href{https://folk.ntnu.no/sondrdl/spinwaves/coupled_spins_3d.mp4}{here in $3$d}. It is also shown in figure \ref{fig:damped_heat} as a heat map. What is apparent here is that the neighbouring spins couple to each other. Since we are dealing with a finite system, I have chosen to use periodic boundary conditions, so that the first spin affects the last one and vice versa. Implementing this in python requires no effort at all as we can access the left hand neighbour of spin \texttt{i} with \texttt{i-1} regardless of the value of \texttt{i}, and the right hand neighbour with \texttt{(i+1)\%n} where \texttt{n} is the number of spins. This looks a bit artificial in the video, but it corresponds physically to arranging the linear chain in a circle. Another choice of boundary conditions is to simply say that the first and last spin only has \textit{one} neighbour. 
 
 %\begin{figure}[htb]
 %	\centering
@@ -48,7 +48,7 @@ If we repeat the procedure used in the previous section except that we couple th
 
 \begin{remark}[Simulating an infinite system]
 
-\textcolor{red}{NB Check this again. The error should not be of the same order as the last step}
+%\textcolor{red}{NB Check this again. The error should not be of the same order as the last step}
 
 If we are to simulate an infinite system we obviously cannot use a discrete model. However, the simulations above suggests that in the limit of \textit{many} spins we can describe the chain as a continuous wave. This suggests that there is a continuum a version of the system in this regime. Then we would have to associate to every index $j$ a position in space 
 $$
@@ -61,14 +61,23 @@ $$
 $$
 we see that the nearest neighbour sum in \eqref{eq:llg_simplified} can be expressed as
 $$
-	\mathbf{S}_{j-1}(t) + \mathbf{S}_{j+1}(t) \to \mathbf{S}(x-a,t) + \mathbf{S}(x+a,t) = 2 \mathbf{S}(x,t) + a^2 \pdd{\mathbf{S}}{x} (x,t) + \mathcal{O}(a^4)
+	\mathbf{S}_{j-1}(t) + \mathbf{S}_{j+1}(t) \to \mathbf{S}(x-a,t) + \mathbf{S}(x+a,t) = 2 \mathbf{S}(x,t) + a^2 \pdd{\mathbf{S}}{x} (x,t) + \mathcal{O}(a^4).
 $$
-Hence, in the limit of small lattice spacings $\|\mathbf{a}\| \to 0$ it should be possible to recast the LLG equation in a continuous form, as a PDE rather than an ode. A self contained discussion of this can be found in \cite{Lakshmanan2011}. To see the connection between this system and continuous waves qualitatively we simulate coupled system of $201$ spins and excite the spin at the centre of the system. The heatmap displaying the time evolution is shown in figure \ref{fig:200_heat}.
+
+In the absence of damping one may insert this into LLG \eqref{eq:llg_simplified} and then obtain 
+$$
+	\pd{\mathbf{S}(x,t)}{t} = -\frac{\gamma a^2 J}{\mu} \mathbf{S}(x,t) \times \pdd{\mathbf{S}(x,t)}{x} + \mathcal{O}(a^4).
+$$
+As we want to consider the limit of $a \to 0$, we are led to define a new time $\tau = a^2 t/J$. Then taking the limit as $a\to 0$ we obtain
+$$
+\pd{\mathbf{S}(x,\tau)}{\tau} = -\frac{\gamma}{\mu} \mathbf{S}(x,\tau) \times \pdd{\mathbf{S}(x,\tau)}{x},
+$$
+where we have to restrict our attention to phenomena with time scales $\mathcal{O}(1/a^2)$. Hence, in the limit of small lattice spacings $\|\mathbf{a}\| \to 0$ it should be possible to recast the LLG equation in a continuous form, as a PDE rather than an ODE, presumably also in a $3$-dimensional lattice. A self contained discussion of this can be found in \cite{Lakshmanan2011}. To see the connection between this system and continuous waves qualitatively we simulate coupled system of $201$ spins and excite the spin at the centre of the system. The heatmap displaying the time evolution is shown in figure \ref{fig:200_heat}.
 
 \begin{figure}[htb]
 	\centering
 	\includegraphics[width=\columnwidth]{../fig/wave_200.pdf}
-	\caption{The figure shows the amplitudes of coupled oscillations of $201$ spins.}
+	\caption{The figure shows the $x$-component of coupled oscillations of $201$ spins.}
 	\label{fig:200_heat}
 \end{figure}
 
@@ -91,6 +100,26 @@ The case of $J<0$ is very similar to the case considered in \ref{sec:groundstate
 
 \subsubsection{Magnetisation}
 
-\textcolor{red}{Check the statement about $d_z$, and write some more details on the magnetisation. Define the term.}
+\begin{definition}
+	We will refer to the \textit{magnetisation} of the system as the mean value of the $z$-component of each spin in the system,
+	\[
+		M \coloneqq \frac{1}{N} \sum_{i=1}^N S_{i,z}
+	\]
+\end{definition}
 
-In section \ref{sec:groundstates} there is a net magnetisation only in the case where $J>0$, whereas it is zero when $J<0$. In the first case the magnetisation is either $-1$ or $1$, depending on the sign of the anisotropy constant $d_z$. In our case $d_z < 0$ so the equilibrium magnetisation is $-1$\footnote{This rather flimsily defined magnetisation we refer to is meant to be the average of the $z$-components of each spin.}. For the case of $J<0$, half of the spins will align along $+\mathbf{e}_z$ and the other half along $-\mathbf{e}_z$ as explained in section \ref{sec:groundstates}.
+In section \ref{sec:groundstates} there is a net magnetisation only in the case where $J>0$, whereas it is zero when $J<0$. In the first case the magnetisation approaches $1$ as the system approaches an equilibrium state. For the case of $J<0$, half of the spins will eventually align along $+\mathbf{e}_z$ and the other half along $-\mathbf{e}_z$ as explained in section \ref{sec:groundstates}, giving a net magnetisation of $0$. We visualise this behaviour by plotting the magnetisation as a function of time for the two cases. This is shown in figure \ref{fig:magn}.
+
+\begin{figure}[htb]
+	\centering
+	\includegraphics[width=\columnwidth]{../fig/magnetisation.pdf}
+	\caption{Magnetisation as a function of time for a ferromagnetic and anti-ferromagnetic chain of $10$ spins, initialised randomly.}
+	\label{fig:magn}
+\end{figure}
+
+We plot the same time evolution of $M$ for the ferromagnetic coupled system shown in the left hand side of figure \ref{fig:damped_heat}. This is shown in figure \ref{fig:magn_coupled}. It is evident from this plot that the magnetisation of the coupled system to a good approximation is constant, despite the $z$-component of each spin varying in time. The coupling introduces --- as we have seen --- propagating excitations along the chain: magnons. This demonstration shows that the magnons causes the magnetisation of the system to decrease. 
+\begin{figure}[htb]
+	\centering
+	\includegraphics[width=\columnwidth]{../fig/magnetisation_coupled.pdf}
+	\caption{Magnetisation as a function of time for a ferromagnetic chain of $10$ spins.}
+	\label{fig:magn_coupled}
+\end{figure}

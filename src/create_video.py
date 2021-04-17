@@ -6,7 +6,7 @@ from mpl_toolkits.mplot3d import Axes3D
 from tqdm import tqdm
 import matplotlib.gridspec as gridspec
 import matplotlib as mpl
-from multiprocessing import Pool
+from multiprocessing import Process, Pool
 
 rc("text",usetex = True)
 rc("font",family = "sans-serif")
@@ -30,6 +30,10 @@ newparams = {'axes.titlesize': fontsize,
             }
 
 plt.rcParams.update(newparams)
+
+# making this global for testing
+S = np.load("../data/X_coupled.npy")
+S = S[::2,:,:]
 
 def spin_snapshot(S):
 
@@ -70,14 +74,14 @@ def spin_snapshot_3d(S):
     fig = plt.figure(figsize = (15,10))
     ax = fig.gca(projection='3d')
 
-    ax.set_xlim3d(-0.1, 0.1)
-    ax.set_ylim3d(-1.25, 3.25)
+    ax.set_xlim3d(-0.3, 0.3)
+    ax.set_ylim3d(-1.5, 4.0)
     ax.set_zlim3d(-0.1,1.1)
 
     spins = np.size(u[:])
 
     x = np.zeros_like(u)
-    y = np.linspace(0,2,spins)
+    y = np.linspace(0,3,spins)
     z = np.zeros_like(u)
 
     for i in range(spins):
@@ -98,13 +102,18 @@ def spin_snapshot_3d(S):
     plt.close()
     return fig
 
-def spin_video(S,title,savepath,threed = False):
+
+def save_fig(i, savepath = "/home/sondre/Pictures/figs_simulation/"):
+    fig = spin_snapshot(S[i])
+    fig.savefig(savepath+"img{0:0=3d}.png".format(i))
+
+def spin_video(S,title,savepath,dim3 = False):
 
     N = 400        # use 400 images per video
     S = S[::2,:,:] # use only every second image
     
     for i in tqdm(range(N)):
-        if threed:
+        if dim3:
             fig = spin_snapshot_3d(S[i,:,:])
         else:
             fig = spin_snapshot(S[i,:,:])
@@ -117,11 +126,34 @@ def spin_video(S,title,savepath,threed = False):
 
     for i in range(N):
         os.remove("/home/sondre/Pictures/figs_simulation/img{0:0=3d}.png".format(i))
+
+def spin_video_parallel(title,savepath):
+    """
+    Function for (trying) to save pictures in a parallel manner
+    to save some time. Very hacky solution, which albeit is not 
+    particularly general as makes it hard to give more arguments to the function being called 
+    in paralllel.
+    """
+    N = 400            # use 400 images per video
+    idx = np.arange(N) # indexes for images to save
+    
+    with Pool(8) as pool:
+        pool.map(save_fig,idx)
+
+    img_name = savepath + "img%03d.png"
+    os.system(f"ffmpeg -framerate 60 -i {img_name} {title}.mp4")
+
+    # remove all the pictures !
+
+    for i in range(N):
+        os.remove("/home/sondre/Pictures/figs_simulation/img{0:0=3d}.png".format(i))
  
 if __name__ == "__main__":
 
+    #spin_video_parallel("../fig/coupled_spins_para","/home/sondre/Pictures/figs_simulation/")
+    
     S = np.load("../data/X_coupled.npy")
-    spin_video(S,"../fig/coupled_spins_3d","/home/sondre/Pictures/figs_simulation/",True)
+    spin_video(S,"../fig/coupled_spins","/home/sondre/Pictures/figs_simulation/",False)
 
     #S = np.load("../data/X_coupled_alpha=0.1.npy")
     #spin_video(S,"../fig/coupled_spins_damped","/home/sondre/Pictures/figs_simulation/")

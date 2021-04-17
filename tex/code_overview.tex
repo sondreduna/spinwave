@@ -38,7 +38,7 @@ produces
 Wall time: 10.4 s
 }
 
-As a curiosity, I can also mentioned that replacing \texttt{np.cross} by the self-made function \texttt{cross} shown below produces a speed-up by approximately a factor of 2.
+As a curiosity, I can also mentioned that only replacing \texttt{np.cross} by the self-made function \texttt{cross} shown below produces a speed-up by approximately a factor of 2.
 \begin{lstlisting}[language = Python]
 def cross(A,B):
 	return np.einsum('ijk,...j,...k',eijk,A,B)
@@ -54,6 +54,7 @@ eijk = np.zeros((3,3,3))
 eijk[0, 1, 2] = eijk[1, 2, 0] = eijk[2, 0, 1] = 1
 eijk[0, 2, 1] = eijk[2, 1, 0] = eijk[1, 0, 2] = -1
 \end{lstlisting}
+There is currently however not support for using \texttt{einsum} together with the just-in-time compiler from numba.
 
 For the error analysis in particular, I wanted a faster implementation. Since this case only included $1$ spin and only the effect of the $\mathbf{B}$-field, I wrote a simple implementation in \texttt{julia} for this specific case. This implementation is albeit not general; changing the parameters requires writing a new implementation of $\mathbf{f}$, and so on. However, it does perform extremely well compared to the \texttt{python}-version:
 
@@ -65,3 +66,5 @@ S_0 = initial_cond(0.1,0.5)
 \texttt{\small 0.994903 seconds (16.34 M allocations: 1.124 GiB, 6.69\% gc time)}
 
 Since we are mostly dealing with small systems in this project I found the \texttt{python} solution to be well suited and efficient enough. Moreover, it is easier to use than my implementation in \texttt{julia} which requires making new implementations of $\mathbf{f}$ for each specific case. At any rate, my time is more valuable than the computer's. 
+
+The program itself takes no reference to the actual physical values of the parameters in the model, and thus all results are given in natural units.

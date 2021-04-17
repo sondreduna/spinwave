@@ -26,6 +26,21 @@ def S_xy(wt,a,b):
 
     return np.array([x,y])
 
+def single_spin():
+    
+    h = 0.005
+
+    S_0 = np.array([initial_cond(0.1,0.5)])
+
+    params = {'d':0,'J':0,'mu':1,'B':np.array([0,0,1.]),'alpha':0}
+
+    spinsolver = MagnonSolver(0,S_0,2*np.pi,h,"RK4",**params)
+
+    Ts, Xs = spinsolver(True)
+    
+    np.save("../data/T.npy",Ts)
+    np.save("../data/S.npy",Xs)
+
 def error_analysis(N):
     """
     Doing error analysis of Heun's method and Euler's method
@@ -106,7 +121,8 @@ def damping():
 
 
 if __name__ == "__main__":
-    
+
+    single_spin()
     #error_analysis(10)
-    damping()
+    #damping()
     
