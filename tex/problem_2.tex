@@ -37,7 +37,7 @@ Next, we initialise all the spins along the $z$ direction except for one of them
 
 \subsubsection{Coupled system, $J > 0$}
 
-If we repeat the procedure used in the previous section except that we couple the spins with $J > 0$, we will observe that all the spins will start to precess, even if they are initialised along the $z$-axis. Since the time evolution is hard to catch on a $2\mathrm{d}$ plot I have made a video showing it \href{https://folk.ntnu.no/sondrdl/spinwaves/coupled_spins.mp4}{here in $2$d} and \href{https://folk.ntnu.no/sondrdl/spinwaves/coupled_spins_3d.mp4}{here in $3$d}. It is also shown in figure \ref{fig:damped_heat} as a heat map. What is apparent here is that the neighbouring spins couple to each other. Since we are dealing with a finite system, I have chosen to use periodic boundary conditions, so that the first spin affects the last one and vice versa. Implementing this in python requires no effort at all as we can access the left hand neighbour of spin \texttt{i} with \texttt{i-1} regardless of the value of \texttt{i}, and the right hand neighbour with \texttt{(i+1)\%n} where \texttt{n} is the number of spins. This looks a bit artificial in the video, but it corresponds physically to arranging the linear chain in a circle. Another choice of boundary conditions is to simply say that the first and last spin only has \textit{one} neighbour. 
+If we repeat the procedure used in the previous section except that we couple the spins with $J > 0$, we will observe that all the spins will start to precess, even if they are initialised along the $z$-axis. Since the time evolution is hard to catch on a $2\mathrm{d}$ plot I have made a video showing it in the file \lstinline|coupled_spins.mp4| and in $3$D in the file \lstinline|coupled_spins_3d.mp4|. It is also shown in figure \ref{fig:damped_heat} as a heat map. What is apparent here is that the neighbouring spins couple to each other. Since we are dealing with a finite system, I have chosen to use periodic boundary conditions, so that the first spin affects the last one and vice versa. Implementing this in python requires no effort at all as we can access the left hand neighbour of spin \texttt{i} with \texttt{i-1} regardless of the value of \texttt{i}, and the right hand neighbour with \texttt{(i+1)\%n} where \texttt{n} is the number of spins. This looks a bit artificial in the video, but it corresponds physically to arranging the linear chain in a circle. Another choice of boundary conditions is to simply say that the first and last spin only has \textit{one} neighbour. 
 
 %\begin{figure}[htb]
 %	\centering
@@ -85,7 +85,7 @@ where we have to restrict our attention to phenomena with time scales $\mathcal{
 
 \subsubsection{Damped, coupled system}
 
-Based on the results from including damping on one spin and the behaviour of the magnon in the previous section we would expect the damped coupled system to show a collective wave motion whose amplitude eventually dies out. This is exactly what is observed in \href{https://folk.ntnu.no/sondrdl/spinwaves/coupled_spins_damped.mp4}{this} video showing the time evolution of the system when we set $\alpha = 0.1$. A heat map illustrating the same time evolution only with slightly less damping is shown in figure \ref{fig:damped_heat}. Here it is evident that the oscillations die out in the case of $\alpha = 0.05$ while they continue to propagate when $\alpha = 0$. Notice also that due to the periodic boundary conditions, there are two magnons propagating through the system. This is observed in the plot as the zigzag pattern, while in the video it is clear from the start that the initial perturbation also affects the last spin in the chain.
+Based on the results from including damping on one spin and the behaviour of the magnon in the previous section we would expect the damped coupled system to show a collective wave motion whose amplitude eventually dies out. This is exactly what is observed in the video in file \lstinline|coupled_spins_damped.mp4| showing the time evolution of the system when we set $\alpha = 0.1$. A heat map illustrating the same time evolution only with slightly less damping is shown in figure \ref{fig:damped_heat}. Here it is evident that the oscillations die out in the case of $\alpha = 0.05$ while they continue to propagate when $\alpha = 0$. Notice also that due to the periodic boundary conditions, there are two magnons propagating through the system. This is observed in the plot as the zigzag pattern, while in the video it is clear from the start that the initial perturbation also affects the last spin in the chain.
 
 \begin{figure}[htb]
 	\centering
@@ -96,7 +96,7 @@ Based on the results from including damping on one spin and the behaviour of the
 
 \subsubsection{Antiferromagnetic coupling, $J<0$}
 
-The case of $J<0$ is very similar to the case considered in \ref{sec:groundstates}. The video of the time evolution corresponding to this case can be found \href{https://folk.ntnu.no/sondrdl/spinwaves/coupled_spins_anti.mp4}{here}. As one spin is tilted, the neighbours tend to oscillate in phase with their neighbours as opposed to the ferromagnetic case where the spins are repelled by their neighbours. 
+The case of $J<0$ is very similar to the case considered in \ref{sec:groundstates}. The video of the time evolution corresponding to this case can be found in the file \lstinline|coupled_spins_anti.mp4|. As one spin is tilted, the neighbours tend to oscillate in phase with their neighbours as opposed to the ferromagnetic case where the spins are repelled by their neighbours. 
 
 \subsubsection{Magnetisation}
 
@@ -116,7 +116,7 @@ In section \ref{sec:groundstates} there is a net magnetisation only in the case 
 	\label{fig:magn}
 \end{figure}
 
-We plot the same time evolution of $M$ for the ferromagnetic coupled system shown in the left hand side of figure \ref{fig:damped_heat}. This is shown in figure \ref{fig:magn_coupled}. It is evident from this plot that the magnetisation of the coupled system to a good approximation is constant, despite the $z$-component of each spin varying in time. The coupling introduces --- as we have seen --- propagating excitations along the chain: magnons. This demonstration shows that the magnons causes the magnetisation of the system to decrease. 
+We plot the same time evolution of $M$ for the ferromagnetic coupled system shown in the left hand side of figure \ref{fig:damped_heat}. This is shown in figure \ref{fig:magn_coupled}. It is evident from this plot that the magnetisation of the coupled system to a good approximation is constant, despite the $z$-component of each spin varying in time. The coupling introduces --- as we have seen --- propagating excitations along the chain: magnons. This demonstration shows that the magnons cause the magnetisation of the system to decrease. 
 \begin{figure}[htb]
 	\centering
 	\includegraphics[width=\columnwidth]{../fig/magnetisation_coupled.pdf}

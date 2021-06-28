@@ -112,7 +112,7 @@ In figure \ref{fig:err_euler} we have plotted the errors for Euler's method for 
 	$$
 		e(h; \delta) \leq M_1 h^p + \frac{M_2}{h} \delta, 
 	$$ 
-	where $p$ is the order of the method, $M_1$ and $M_2$ are constants depending on the function $\mathbf{f}$ defining the ODE, its derivatives and the length of the integration interval. The global truncation error of the method is $\mathcal{O}(h^p)$ while the error introduced by round-off in the computer must scale approximately like $\frac{\delta}{h}$, since $h\sim N^{-1}$. If one manages to find the constants $M_1$ and $M_2$ (or some bounds of them), the ideal step length is approximately given by 
+	where $p$ is the order of the method, $M_1$ and $M_2$ are constants depending on the function $\mathbf{f}$ defining the ODE, its derivatives and the length of the integration interval. The global truncation error of the method is $\mathcal{O}(h^p)$ while the error introduced by round-off in the computer must scale approximately like $\frac{\delta}{h}$, since $h\sim N^{-1}$. If one manages to find the constants $M_1$ and $M_2$ (or some bounds of them), one can approximate the ideal step length by minimizing the error with respect to $h$ and get 
 	$$
 		h_{\text{ideal}} \approx \left( \frac{M_2 \delta}{p M_1}  \right)^{1/(p+1)}.
 	$$
